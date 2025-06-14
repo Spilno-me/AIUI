@@ -59,7 +59,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
               name="fullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <FormLabel>Full Name *</FormLabel>
                   <FormControl>
                     <Input 
                       placeholder="Enter your full name" 
@@ -77,7 +77,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email Address</FormLabel>
+                  <FormLabel>Email Address *</FormLabel>
                   <FormControl>
                     <Input 
                       type="email" 
@@ -96,7 +96,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Password *</FormLabel>
                   <FormControl>
                     <Input 
                       type="password" 
@@ -115,7 +115,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
               name="industry"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Industry</FormLabel>
+                  <FormLabel>Industry *</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger data-testid="industry-select">

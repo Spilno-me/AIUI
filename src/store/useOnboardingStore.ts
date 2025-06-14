@@ -53,7 +53,7 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
   isCompleted: false,
   
   setCurrentStep: (step: number) => {
-    set({ currentStep: Math.max(1, Math.min(3, step)) });
+    set({ currentStep: Math.max(1, Math.min(4, step)) });
   },
   
   updateUserInfo: (info) => {
@@ -76,7 +76,7 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
   
   nextStep: () => {
     const { currentStep } = get();
-    if (currentStep < 3) {
+    if (currentStep < 4) {
       set({ currentStep: currentStep + 1 });
     }
   },

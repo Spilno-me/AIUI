@@ -35,14 +35,14 @@ export function WizardLayout() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto bg-white/10 dark:bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 dark:border-white/10 shadow-2xl p-6">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Welcome to Our Platform
+            Welcome to AIUI
           </h1>
           <p className="text-gray-600 dark:text-gray-300">
-            Let's set up your account in just a few simple steps
+            Let's vibe!
           </p>
         </div>
 
@@ -73,12 +73,12 @@ export function WizardLayout() {
               >
                 <button
                   onClick={() => setCurrentStep(step.number)}
-                  className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-medium transition-colors ${
+                  className={`w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-medium transition-all shadow-lg backdrop-blur-sm ${
                     currentStep >= step.number
-                      ? 'bg-primary text-primary-foreground border-primary'
+                      ? 'bg-primary text-primary-foreground border-primary shadow-primary/25 ring-2 ring-primary/20'
                       : currentStep === step.number
-                      ? 'border-primary text-primary bg-primary/10'
-                      : 'border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500'
+                      ? 'border-primary text-primary bg-white/80 dark:bg-gray-800/80 shadow-primary/20 ring-2 ring-primary/30'
+                      : 'border-white/40 dark:border-white/20 text-gray-600 dark:text-gray-300 bg-white/60 dark:bg-gray-800/60 hover:border-white/60 dark:hover:border-white/30 hover:shadow-xl'
                   }`}
                   data-testid={`step-${step.number}-indicator`}
                 >

@@ -83,7 +83,7 @@ export function PersonalizationStep({ onNext, onPrevious }: PersonalizationStepP
               name="vibe"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-base font-semibold">What's your vibe?</FormLabel>
+                  <FormLabel className="text-base font-semibold">What's your vibe? *</FormLabel>
                   <FormDescription>
                     Choose the personality that best describes you.
                   </FormDescription>
@@ -124,7 +124,7 @@ export function PersonalizationStep({ onNext, onPrevious }: PersonalizationStepP
               name="favoriteColor"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-base font-semibold">Favorite Color</FormLabel>
+                  <FormLabel className="text-base font-semibold">Favorite Color *</FormLabel>
                   <FormDescription>
                     Pick a color that represents you - we'll use it to personalize your interface.
                   </FormDescription>

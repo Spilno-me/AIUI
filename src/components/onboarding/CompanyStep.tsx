@@ -58,7 +58,7 @@ export function CompanyStep({ onNext, onPrevious }: CompanyStepProps) {
               name="companyName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Company Name</FormLabel>
+                  <FormLabel>Company Name *</FormLabel>
                   <FormControl>
                     <Input 
                       placeholder="Enter your company name" 
@@ -76,7 +76,7 @@ export function CompanyStep({ onNext, onPrevious }: CompanyStepProps) {
               name="numberOfEmployees"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Number of Employees</FormLabel>
+                  <FormLabel>Number of Employees *</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger data-testid="numberOfEmployees-select">
@@ -101,7 +101,7 @@ export function CompanyStep({ onNext, onPrevious }: CompanyStepProps) {
               name="goals"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>What are your main goals?</FormLabel>
+                  <FormLabel>What are your main goals? *</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Tell us about your objectives and what you hope to achieve..."
