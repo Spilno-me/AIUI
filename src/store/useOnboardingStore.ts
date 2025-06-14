@@ -22,6 +22,7 @@ export interface OnboardingState {
   currentStep: number;
   data: OnboardingData;
   isCompleted: boolean;
+  completedSteps: Set<number>;
   
   // Actions
   setCurrentStep: (step: number) => void;
@@ -32,6 +33,8 @@ export interface OnboardingState {
   previousStep: () => void;
   completeOnboarding: () => void;
   resetOnboarding: () => void;
+  markStepCompleted: (step: number) => void;
+  isStepAccessible: (step: number) => boolean;
 }
 
 const initialData: OnboardingData = {
@@ -51,9 +54,13 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
   currentStep: 1,
   data: initialData,
   isCompleted: false,
+  completedSteps: new Set(), // No steps completed initially
   
   setCurrentStep: (step: number) => {
-    set({ currentStep: Math.max(1, Math.min(4, step)) });
+    const { isStepAccessible } = get();
+    if (isStepAccessible(step)) {
+      set({ currentStep: Math.max(1, Math.min(4, step)) });
+    }
   },
   
   updateUserInfo: (info) => {
@@ -75,9 +82,10 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
   },
   
   nextStep: () => {
-    const { currentStep } = get();
-    if (currentStep < 4) {
-      set({ currentStep: currentStep + 1 });
+    const { currentStep, isStepAccessible } = get();
+    const nextStepNumber = currentStep + 1;
+    if (nextStepNumber <= 4 && isStepAccessible(nextStepNumber)) {
+      set({ currentStep: nextStepNumber });
     }
   },
   
@@ -97,6 +105,21 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
       currentStep: 1,
       data: initialData,
       isCompleted: false,
+      completedSteps: new Set(),
     });
+  },
+  
+  markStepCompleted: (step: number) => {
+    set((state) => ({
+      completedSteps: new Set([...state.completedSteps, step])
+    }));
+  },
+  
+  isStepAccessible: (step: number) => {
+    const { completedSteps } = get();
+    // Step 1 is always accessible
+    if (step === 1) return true;
+    // For other steps, the previous step must be completed
+    return completedSteps.has(step - 1);
   },
 })); 

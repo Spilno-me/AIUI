@@ -25,7 +25,7 @@ interface CompanyStepProps {
 }
 
 export function CompanyStep({ onNext, onPrevious }: CompanyStepProps) {
-  const { data, updateCompanyDetails } = useOnboardingStore();
+  const { data, updateCompanyDetails, markStepCompleted } = useOnboardingStore();
   
   const form = useForm<CompanyStepData>({
     resolver: zodResolver(companyStepSchema),
@@ -39,6 +39,7 @@ export function CompanyStep({ onNext, onPrevious }: CompanyStepProps) {
 
   const handleFormSubmit = (formData: CompanyStepData) => {
     updateCompanyDetails(formData);
+    markStepCompleted(2);
     onNext();
   };
 

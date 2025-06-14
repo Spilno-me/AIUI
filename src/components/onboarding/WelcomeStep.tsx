@@ -26,7 +26,7 @@ interface WelcomeStepProps {
 }
 
 export function WelcomeStep({ onNext }: WelcomeStepProps) {
-  const { data, updateUserInfo } = useOnboardingStore();
+  const { data, updateUserInfo, markStepCompleted } = useOnboardingStore();
   
   const form = useForm<WelcomeStepData>({
     resolver: zodResolver(welcomeStepSchema),
@@ -40,6 +40,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
 
   const handleFormSubmit = (formData: WelcomeStepData) => {
     updateUserInfo(formData);
+    markStepCompleted(1);
     onNext();
   };
 

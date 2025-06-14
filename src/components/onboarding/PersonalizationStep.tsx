@@ -52,7 +52,7 @@ interface PersonalizationStepProps {
 }
 
 export function PersonalizationStep({ onNext, onPrevious }: PersonalizationStepProps) {
-  const { data, updatePersonalization } = useOnboardingStore();
+  const { data, updatePersonalization, markStepCompleted } = useOnboardingStore();
   
   const form = useForm<PersonalizationStepData>({
     resolver: zodResolver(personalizationStepSchema),
@@ -64,6 +64,7 @@ export function PersonalizationStep({ onNext, onPrevious }: PersonalizationStepP
 
   const handleFormSubmit = (formData: PersonalizationStepData) => {
     updatePersonalization(formData);
+    markStepCompleted(3);
     onNext();
   };
 

@@ -14,7 +14,7 @@ const STEPS = [
 ] as const;
 
 export function WizardLayout() {
-  const { currentStep, nextStep, previousStep, setCurrentStep } = useOnboardingStore();
+  const { currentStep, nextStep, previousStep, setCurrentStep, isStepAccessible } = useOnboardingStore();
 
   const progressPercentage = ((currentStep - 1) / (STEPS.length - 1)) * 100;
 
@@ -72,13 +72,20 @@ export function WizardLayout() {
                 className="flex flex-col items-center space-y-2"
               >
                 <button
-                  onClick={() => setCurrentStep(step.number)}
+                  onClick={() => {
+                    if (isStepAccessible(step.number)) {
+                      setCurrentStep(step.number);
+                    }
+                  }}
+                  disabled={!isStepAccessible(step.number)}
                   className={`w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-medium transition-all shadow-lg backdrop-blur-sm ${
-                    currentStep >= step.number
-                      ? 'bg-primary text-primary-foreground border-primary shadow-primary/25 ring-2 ring-primary/20'
+                    !isStepAccessible(step.number)
+                      ? 'border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 cursor-not-allowed opacity-50'
+                      : currentStep >= step.number
+                      ? 'bg-primary text-primary-foreground border-primary shadow-primary/25 ring-2 ring-primary/20 cursor-pointer hover:shadow-xl'
                       : currentStep === step.number
-                      ? 'border-primary text-primary bg-white/80 dark:bg-gray-800/80 shadow-primary/20 ring-2 ring-primary/30'
-                      : 'border-white/40 dark:border-white/20 text-gray-600 dark:text-gray-300 bg-white/60 dark:bg-gray-800/60 hover:border-white/60 dark:hover:border-white/30 hover:shadow-xl'
+                      ? 'border-primary text-primary bg-white/80 dark:bg-gray-800/80 shadow-primary/20 ring-2 ring-primary/30 cursor-pointer'
+                      : 'border-white/40 dark:border-white/20 text-gray-600 dark:text-gray-300 bg-white/60 dark:bg-gray-800/60 hover:border-white/60 dark:hover:border-white/30 hover:shadow-xl cursor-pointer'
                   }`}
                   data-testid={`step-${step.number}-indicator`}
                 >
@@ -86,13 +93,19 @@ export function WizardLayout() {
                 </button>
                 <div className="text-center">
                   <p className={`text-xs font-medium ${
-                    currentStep >= step.number 
+                    !isStepAccessible(step.number)
+                      ? 'text-gray-400 dark:text-gray-500'
+                      : currentStep >= step.number 
                       ? 'text-primary' 
                       : 'text-gray-500 dark:text-gray-400'
                   }`}>
                     {step.title}
                   </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 hidden sm:block">
+                  <p className={`text-xs hidden sm:block ${
+                    !isStepAccessible(step.number)
+                      ? 'text-gray-300 dark:text-gray-600'
+                      : 'text-gray-400 dark:text-gray-500'
+                  }`}>
                     {step.description}
                   </p>
                 </div>
