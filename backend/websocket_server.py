@@ -1,7 +1,7 @@
 import asyncio
 import websockets
 
-async def handle_client(websocket, path):
+async def handle_client(websocket):
     """Handle a connected WebSocket client."""
     print(f"Client connected from {websocket.remote_address}")
     
