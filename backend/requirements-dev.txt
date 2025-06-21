@@ -1,0 +1,7 @@
+black
+ipython
+pre-commit
+pylint
+# pytest
+# pytest-asyncio
+# pytest-cov
