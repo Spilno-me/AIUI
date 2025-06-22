@@ -4,6 +4,7 @@ This server provides tools for AI to suggest values for onboarding wizard fields
 """
 
 import json
+from pathlib import Path
 
 from mcp.server.fastmcp import FastMCP
 
@@ -25,7 +26,10 @@ mcp = FastMCP("aiui_wizard")
 # WEBSOCKET_URL = "ws://localhost:8765"
 
 # Log file path
-LOG_FILE_PATH = "mcp.log"
+LOG_FILE_PATH = Path("mcp.log")
+
+# Touch the log file on module import
+LOG_FILE_PATH.touch(exist_ok=True)
 
 
 def log_event(event_data: dict) -> None:

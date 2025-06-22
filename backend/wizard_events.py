@@ -83,7 +83,6 @@ class EmailSuggestionEvent(BaseSuggestionEvent):
     suggestion: str = Field(..., description="Suggested email address")
 
 
-
 class IndustrySuggestionEvent(BaseSuggestionEvent):
     """Event for suggesting industry"""
 
