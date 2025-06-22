@@ -8,7 +8,7 @@ from pathlib import Path
 
 from mcp.server.fastmcp import FastMCP
 
-from wizard_events import (
+from aiui_mcp.wizard_events import (
     FullNameSuggestionEvent,
     EmailSuggestionEvent,
     IndustrySuggestionEvent,
@@ -20,7 +20,7 @@ from wizard_events import (
     FavoriteColorSuggestionEvent,
 )
 
-mcp = FastMCP("aiui_wizard")
+mcp = FastMCP("AIUI")
 
 # # WebSocket endpoint for pushing suggestions to UI
 # WEBSOCKET_URL = "ws://localhost:8765"

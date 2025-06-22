@@ -10,6 +10,6 @@ os.chdir(user_mcp_dir)
 
 
 if __name__ == "__main__":
-    from aiui_mcp.server import mcp
+    from aiui_mcp.mcp_server import mcp
 
     mcp.run(transport="stdio")
