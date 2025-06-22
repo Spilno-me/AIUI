@@ -56,7 +56,6 @@ class BaseSuggestionEvent(BaseModel):
     step: WizardStep = Field(..., description="Which wizard step this suggestion is for")
     field_name: str = Field(..., description="Name of the field being suggested")
     suggestion: str = Field(..., description="The AI's suggested value")
-    confidence: float = Field(default=0.8, ge=0.0, le=1.0, description="AI confidence in suggestion (0-1)")
     reasoning: Optional[str] = Field(default=None, description="Optional reasoning for the suggestion")
 
 

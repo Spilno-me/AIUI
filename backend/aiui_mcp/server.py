@@ -50,185 +50,148 @@ async def send_suggestion_to_ui(suggestion_event: dict) -> bool:
 
 
 @mcp.tool()
-async def suggest_full_name(context: Optional[str] = None) -> str:
-    """Suggest a full name for the welcome step"""
-    # In a real implementation, this would use AI to generate suggestions
-    # For now, using a simple example
-    suggestion = "John Smith"
-    
+async def suggest_full_name(suggestion: str, reasoning: Optional[str] = None) -> str:
+    """Send a full name suggestion to the UI"""
     event = FullNameSuggestionEvent(
         suggestion=suggestion,
-        confidence=0.7,
-        reasoning=context or "Generated a common professional name"
+        reasoning=reasoning
     )
     
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Suggested full name: {suggestion}"
+    print(json.dumps(event.model_dump(), indent=2))
+    success = await send_suggestion_to_ui(event.model_dump())
+    return f"Sent full name suggestion: {suggestion}" if success else "Failed to send suggestion"
 
 
 @mcp.tool()
-async def suggest_email(full_name: Optional[str] = None, company: Optional[str] = None) -> str:
-    """Suggest an email address based on name and company"""
-    if full_name:
-        base_name = full_name.lower().replace(" ", ".")
-        domain = f"{company.lower()}.com" if company else "example.com"
-        suggestion = f"{base_name}@{domain}"
-    else:
-        suggestion = "user@example.com"
-    
+async def suggest_email(suggestion: str, reasoning: Optional[str] = None) -> str:
+    """Send an email suggestion to the UI"""
     event = EmailSuggestionEvent(
         suggestion=suggestion,
-        confidence=0.8,
-        reasoning=f"Generated email based on name: {full_name} and company: {company}"
+        reasoning=reasoning
     )
     
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Suggested email: {suggestion}"
+    print(json.dumps(event.model_dump(), indent=2))
+    success = await send_suggestion_to_ui(event.model_dump())
+    return f"Sent email suggestion: {suggestion}" if success else "Failed to send suggestion"
 
 
 @mcp.tool()
-async def suggest_password() -> str:
-    """Suggest a secure password"""
-    suggestion = "SecurePass123!"
-    
+async def suggest_password(suggestion: str, reasoning: Optional[str] = None) -> str:
+    """Send a password suggestion to the UI"""
     event = PasswordSuggestionEvent(
         suggestion=suggestion,
-        confidence=0.9,
-        reasoning="Generated a secure password with mixed case, numbers, and symbols"
+        reasoning=reasoning
     )
     
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Suggested secure password format"
+    print(json.dumps(event.model_dump(), indent=2))
+    success = await send_suggestion_to_ui(event.model_dump())
+    return "Sent password suggestion" if success else "Failed to send suggestion"
 
 
 @mcp.tool()
-async def suggest_industry(context: Optional[str] = None) -> str:
-    """Suggest an industry based on context"""
-    # Simple logic - in real implementation would use AI
-    suggestion = IndustryType.TECHNOLOGY.value
+async def suggest_industry(suggestion: str, reasoning: Optional[str] = None) -> str:
+    """Send an industry suggestion to the UI"""
+    try:
+        industry_enum = IndustryType(suggestion)
+    except ValueError:
+        return f"Invalid industry: {suggestion}. Must be one of: {', '.join([e.value for e in IndustryType])}"
     
     event = IndustrySuggestionEvent(
-        suggestion=IndustryType.TECHNOLOGY,
-        confidence=0.7,
-        reasoning=context or "Technology is a common industry for this platform"
+        suggestion=industry_enum,
+        reasoning=reasoning
     )
     
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Suggested industry: {suggestion}"
+    print(json.dumps(event.model_dump(), indent=2))
+    success = await send_suggestion_to_ui(event.model_dump())
+    return f"Sent industry suggestion: {suggestion}" if success else "Failed to send suggestion"
 
 
 @mcp.tool()
-async def suggest_company_name(industry: Optional[str] = None, context: Optional[str] = None) -> str:
-    """Suggest a company name based on industry and context"""
-    base_names = {
-        "Technology": "TechCorp",
-        "Healthcare": "HealthPlus",
-        "Finance": "FinanceFirst",
-        "Education": "EduTech"
-    }
-    
-    suggestion = base_names.get(industry, "MyCompany") + " Inc."
-    
+async def suggest_company_name(suggestion: str, reasoning: Optional[str] = None) -> str:
+    """Send a company name suggestion to the UI"""
     event = CompanyNameSuggestionEvent(
         suggestion=suggestion,
-        confidence=0.6,
-        reasoning=f"Generated company name based on industry: {industry}"
+        reasoning=reasoning
     )
     
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Suggested company name: {suggestion}"
+    print(json.dumps(event.model_dump(), indent=2))
+    success = await send_suggestion_to_ui(event.model_dump())
+    return f"Sent company name suggestion: {suggestion}" if success else "Failed to send suggestion"
 
 
 @mcp.tool()
-async def suggest_employee_count(company_name: Optional[str] = None, industry: Optional[str] = None) -> str:
-    """Suggest employee count range"""
-    # Simple logic based on industry
-    if industry == "Technology":
-        suggestion = EmployeeRangeType.RANGE_11_50
-    else:
-        suggestion = EmployeeRangeType.RANGE_1_10
+async def suggest_employee_count(suggestion: str, reasoning: Optional[str] = None) -> str:
+    """Send an employee count suggestion to the UI"""
+    try:
+        employee_range = EmployeeRangeType(suggestion)
+    except ValueError:
+        return f"Invalid employee range: {suggestion}. Must be one of: {', '.join([e.value for e in EmployeeRangeType])}"
     
     event = NumberOfEmployeesSuggestionEvent(
-        suggestion=suggestion,
-        confidence=0.7,
-        reasoning=f"Estimated employee count based on industry: {industry}"
+        suggestion=employee_range,
+        reasoning=reasoning
     )
     
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Suggested employee count: {suggestion.value}"
+    print(json.dumps(event.model_dump(), indent=2))
+    success = await send_suggestion_to_ui(event.model_dump())
+    return f"Sent employee count suggestion: {suggestion}" if success else "Failed to send suggestion"
 
 
 @mcp.tool()
-async def suggest_goals(industry: Optional[str] = None, company_size: Optional[str] = None) -> str:
-    """Suggest company goals based on context"""
-    goal_templates = {
-        "Technology": "Develop innovative software solutions that streamline business processes and enhance user experience.",
-        "Healthcare": "Improve patient outcomes through technology-driven healthcare solutions and better care coordination.",
-        "Finance": "Provide secure and efficient financial services that help clients achieve their financial goals."
-    }
-    
-    suggestion = goal_templates.get(industry, "Build a successful business that serves our customers effectively and grows sustainably.")
-    
+async def suggest_goals(suggestion: str, reasoning: Optional[str] = None) -> str:
+    """Send a goals suggestion to the UI"""
     event = GoalsSuggestionEvent(
         suggestion=suggestion,
-        confidence=0.8,
-        reasoning=f"Generated goals template for {industry} industry"
+        reasoning=reasoning
     )
     
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Suggested goals for {industry} industry"
+    print(json.dumps(event.model_dump(), indent=2))
+    success = await send_suggestion_to_ui(event.model_dump())
+    return f"Sent goals suggestion" if success else "Failed to send suggestion"
 
 
 @mcp.tool()
-async def suggest_subscription_preference(context: Optional[str] = None) -> str:
-    """Suggest whether to subscribe to updates"""
-    suggestion = True  # Most users prefer to stay updated
-    
+async def suggest_subscription_preference(suggestion: bool, reasoning: Optional[str] = None) -> str:
+    """Send a subscription preference suggestion to the UI"""
     event = SubscribeToUpdatesSuggestionEvent(
         suggestion=suggestion,
-        confidence=0.9,
-        reasoning="Most users benefit from product updates and tips"
+        reasoning=reasoning
     )
     
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Suggested subscription preference: {suggestion}"
+    print(json.dumps(event.model_dump(), indent=2))
+    success = await send_suggestion_to_ui(event.model_dump())
+    return f"Sent subscription preference suggestion: {suggestion}" if success else "Failed to send suggestion"
 
 
 @mcp.tool()
-async def suggest_vibe(context: Optional[str] = None) -> str:
-    """Suggest personality vibe"""
-    suggestion = VibeType.BUILDER  # Default to builder as it's common for platform users
+async def suggest_vibe(suggestion: str, reasoning: Optional[str] = None) -> str:
+    """Send a personality vibe suggestion to the UI"""
+    try:
+        vibe_enum = VibeType(suggestion)
+    except ValueError:
+        return f"Invalid vibe: {suggestion}. Must be one of: {', '.join([e.value for e in VibeType])}"
     
     event = VibeSuggestionEvent(
-        suggestion=suggestion,
-        confidence=0.7,
-        reasoning="Builder vibe is common for users of this platform"
+        suggestion=vibe_enum,
+        reasoning=reasoning
     )
     
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Suggested vibe: {suggestion.value}"
+    print(json.dumps(event.model_dump(), indent=2))
+    success = await send_suggestion_to_ui(event.model_dump())
+    return f"Sent vibe suggestion: {suggestion}" if success else "Failed to send suggestion"
 
 
 @mcp.tool()
-async def suggest_favorite_color(vibe: Optional[str] = None) -> str:
-    """Suggest favorite color based on vibe"""
-    color_map = {
-        "builder": "#3b82f6",  # Blue
-        "dreamer": "#8b5cf6",  # Purple  
-        "hacker": "#10b981",   # Green
-        "visionary": "#f59e0b" # Yellow
-    }
-    
-    suggestion = color_map.get(vibe, "#3b82f6")
-    
+async def suggest_favorite_color(suggestion: str, reasoning: Optional[str] = None) -> str:
+    """Send a favorite color suggestion to the UI"""
     event = FavoriteColorSuggestionEvent(
         suggestion=suggestion,
-        confidence=0.8,
-        reasoning=f"Color chosen to match the {vibe} personality vibe"
+        reasoning=reasoning
     )
     
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Suggested color: {suggestion} for {vibe} vibe"
+    print(json.dumps(event.model_dump(), indent=2))
+    success = await send_suggestion_to_ui(event.model_dump())
+    return f"Sent color suggestion: {suggestion}" if success else "Failed to send suggestion"
 
 
 @mcp.tool()
