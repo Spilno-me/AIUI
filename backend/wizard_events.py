@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 
 class WizardStep(str, Enum):
     """Enum for wizard steps"""
+
     WELCOME = "welcome"
     COMPANY = "company"
     PERSONALIZATION = "personalization"
@@ -19,14 +20,16 @@ class WizardStep(str, Enum):
 
 class VibeType(str, Enum):
     """Enum for personality vibe options"""
+
     BUILDER = "builder"
-    DREAMER = "dreamer" 
+    DREAMER = "dreamer"
     HACKER = "hacker"
     VISIONARY = "visionary"
 
 
 class IndustryType(str, Enum):
     """Enum for industry options"""
+
     TECHNOLOGY = "Technology"
     HEALTHCARE = "Healthcare"
     FINANCE = "Finance"
@@ -41,6 +44,7 @@ class IndustryType(str, Enum):
 
 class EmployeeRangeType(str, Enum):
     """Enum for employee count ranges"""
+
     RANGE_1_10 = "1-10"
     RANGE_11_50 = "11-50"
     RANGE_51_200 = "51-200"
@@ -52,16 +56,18 @@ class EmployeeRangeType(str, Enum):
 # Base event model
 class BaseSuggestionEvent(BaseModel):
     """Base model for all suggestion events"""
+
     event_type: str = Field(..., description="Type of suggestion event")
     step: WizardStep = Field(..., description="Which wizard step this suggestion is for")
     field_name: str = Field(..., description="Name of the field being suggested")
     suggestion: str = Field(..., description="The AI's suggested value")
-    reasoning: Optional[str] = Field(default=None, description="Optional reasoning for the suggestion")
+    reasoning: str = Field(..., description="Reasoning for the suggestion")
 
 
 # Welcome Step Events
 class FullNameSuggestionEvent(BaseSuggestionEvent):
     """Event for suggesting full name"""
+
     event_type: Literal["full_name_suggestion"] = "full_name_suggestion"
     step: Literal[WizardStep.WELCOME] = WizardStep.WELCOME
     field_name: Literal["fullName"] = "fullName"
@@ -70,22 +76,17 @@ class FullNameSuggestionEvent(BaseSuggestionEvent):
 
 class EmailSuggestionEvent(BaseSuggestionEvent):
     """Event for suggesting email address"""
+
     event_type: Literal["email_suggestion"] = "email_suggestion"
     step: Literal[WizardStep.WELCOME] = WizardStep.WELCOME
     field_name: Literal["email"] = "email"
     suggestion: str = Field(..., description="Suggested email address")
 
 
-class PasswordSuggestionEvent(BaseSuggestionEvent):
-    """Event for suggesting password"""
-    event_type: Literal["password_suggestion"] = "password_suggestion"
-    step: Literal[WizardStep.WELCOME] = WizardStep.WELCOME
-    field_name: Literal["password"] = "password"
-    suggestion: str = Field(..., min_length=6, max_length=50, description="Suggested secure password")
-
 
 class IndustrySuggestionEvent(BaseSuggestionEvent):
     """Event for suggesting industry"""
+
     event_type: Literal["industry_suggestion"] = "industry_suggestion"
     step: Literal[WizardStep.WELCOME] = WizardStep.WELCOME
     field_name: Literal["industry"] = "industry"
@@ -95,6 +96,7 @@ class IndustrySuggestionEvent(BaseSuggestionEvent):
 # Company Step Events
 class CompanyNameSuggestionEvent(BaseSuggestionEvent):
     """Event for suggesting company name"""
+
     event_type: Literal["company_name_suggestion"] = "company_name_suggestion"
     step: Literal[WizardStep.COMPANY] = WizardStep.COMPANY
     field_name: Literal["companyName"] = "companyName"
@@ -103,6 +105,7 @@ class CompanyNameSuggestionEvent(BaseSuggestionEvent):
 
 class NumberOfEmployeesSuggestionEvent(BaseSuggestionEvent):
     """Event for suggesting number of employees"""
+
     event_type: Literal["number_of_employees_suggestion"] = "number_of_employees_suggestion"
     step: Literal[WizardStep.COMPANY] = WizardStep.COMPANY
     field_name: Literal["numberOfEmployees"] = "numberOfEmployees"
@@ -111,6 +114,7 @@ class NumberOfEmployeesSuggestionEvent(BaseSuggestionEvent):
 
 class GoalsSuggestionEvent(BaseSuggestionEvent):
     """Event for suggesting goals"""
+
     event_type: Literal["goals_suggestion"] = "goals_suggestion"
     step: Literal[WizardStep.COMPANY] = WizardStep.COMPANY
     field_name: Literal["goals"] = "goals"
@@ -119,6 +123,7 @@ class GoalsSuggestionEvent(BaseSuggestionEvent):
 
 class SubscribeToUpdatesSuggestionEvent(BaseSuggestionEvent):
     """Event for suggesting subscription preference"""
+
     event_type: Literal["subscribe_to_updates_suggestion"] = "subscribe_to_updates_suggestion"
     step: Literal[WizardStep.COMPANY] = WizardStep.COMPANY
     field_name: Literal["subscribeToUpdates"] = "subscribeToUpdates"
@@ -128,6 +133,7 @@ class SubscribeToUpdatesSuggestionEvent(BaseSuggestionEvent):
 # Personalization Step Events
 class VibeSuggestionEvent(BaseSuggestionEvent):
     """Event for suggesting personality vibe"""
+
     event_type: Literal["vibe_suggestion"] = "vibe_suggestion"
     step: Literal[WizardStep.PERSONALIZATION] = WizardStep.PERSONALIZATION
     field_name: Literal["vibe"] = "vibe"
@@ -136,6 +142,7 @@ class VibeSuggestionEvent(BaseSuggestionEvent):
 
 class FavoriteColorSuggestionEvent(BaseSuggestionEvent):
     """Event for suggesting favorite color"""
+
     event_type: Literal["favorite_color_suggestion"] = "favorite_color_suggestion"
     step: Literal[WizardStep.PERSONALIZATION] = WizardStep.PERSONALIZATION
     field_name: Literal["favoriteColor"] = "favoriteColor"
@@ -144,22 +151,22 @@ class FavoriteColorSuggestionEvent(BaseSuggestionEvent):
 
 # Union type for all suggestion events
 SuggestionEvent = (
-    FullNameSuggestionEvent |
-    EmailSuggestionEvent |
-    PasswordSuggestionEvent |
-    IndustrySuggestionEvent |
-    CompanyNameSuggestionEvent |
-    NumberOfEmployeesSuggestionEvent |
-    GoalsSuggestionEvent |
-    SubscribeToUpdatesSuggestionEvent |
-    VibeSuggestionEvent |
-    FavoriteColorSuggestionEvent
+    FullNameSuggestionEvent
+    | EmailSuggestionEvent
+    | IndustrySuggestionEvent
+    | CompanyNameSuggestionEvent
+    | NumberOfEmployeesSuggestionEvent
+    | GoalsSuggestionEvent
+    | SubscribeToUpdatesSuggestionEvent
+    | VibeSuggestionEvent
+    | FavoriteColorSuggestionEvent
 )
 
 
 # Request models for MCP tools
 class SuggestionRequest(BaseModel):
     """Request model for generating field suggestions"""
+
     step: WizardStep = Field(..., description="Which wizard step to suggest for")
     field_name: str = Field(..., description="Which field to suggest a value for")
     context: Optional[dict] = Field(default=None, description="Additional context for generating suggestions")
@@ -167,6 +174,7 @@ class SuggestionRequest(BaseModel):
 
 class BatchSuggestionRequest(BaseModel):
     """Request model for generating multiple field suggestions"""
+
     step: WizardStep = Field(..., description="Which wizard step to suggest for")
     fields: list[str] = Field(..., description="List of field names to suggest values for")
     context: Optional[dict] = Field(default=None, description="Additional context for generating suggestions")
