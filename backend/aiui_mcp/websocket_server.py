@@ -2,15 +2,16 @@ import asyncio
 import websockets
 
 
+WEBSOCKET_SINGLETON = None
+
+
 async def handle_client(websocket):
     """Handle a connected WebSocket client."""
+    global WEBSOCKET_SINGLETON
+    WEBSOCKET_SINGLETON = websocket  # For the purposes of the PoC we are assuming there is only one client
     print(f"Client connected from {websocket.remote_address}")
 
     try:
-        # # Send "hello world" to the client
-        # await websocket.send("hello world")
-        # print("Sent 'hello world' to client")
-
         # Listen for messages from the client
         async for message in websocket:
             print(f"Received message: {message}")

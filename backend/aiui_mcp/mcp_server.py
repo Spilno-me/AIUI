@@ -5,9 +5,11 @@ This server provides tools for AI to suggest values for onboarding wizard fields
 
 import json
 from pathlib import Path
+from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
+from aiui_mcp.websocket_server import WEBSOCKET_SINGLETON
 from aiui_mcp.wizard_events import (
     FullNameSuggestionEvent,
     EmailSuggestionEvent,
@@ -22,14 +24,12 @@ from aiui_mcp.wizard_events import (
 
 mcp = FastMCP("AIUI")
 
-# # WebSocket endpoint for pushing suggestions to UI
-# WEBSOCKET_URL = "ws://localhost:8765"
-
 # Log file path
 LOG_FILE_PATH = Path("mcp.log")
 
 # Touch the log file on module import
 LOG_FILE_PATH.touch(exist_ok=True)
+
 
 async def run_mcp_server():
     print("Starting MCP server...")
@@ -42,16 +42,14 @@ def log_event(event_data: dict) -> None:
         f.write(json.dumps(event_data, indent=2) + "\n")
 
 
-async def send_suggestion_to_ui(suggestion_event: dict) -> None:
+async def send_suggestion_to_ui(suggestion_event: dict[str, Any]) -> None:
     """Send suggestion event to UI via WebSocket"""
     log_event(suggestion_event)
+    if not WEBSOCKET_SINGLETON:
+        raise RuntimeError("The client is not connected to the WebSocket server")
+
+    await WEBSOCKET_SINGLETON.send(json.dumps(suggestion_event))
     return
-    # TODO use already existing websocket connection
-    # try:
-    #     async with websockets.connect(WEBSOCKET_URL) as websocket:
-    #         await websocket.send(json.dumps(suggestion_event))
-    # except Exception as e:
-    #     raise RuntimeError(f"Failed to send suggestion to UI: {e}") from e
 
 
 @mcp.tool()
