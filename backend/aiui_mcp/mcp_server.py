@@ -8,7 +8,7 @@ from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
-from aiui_mcp.common import get_websocket_singleton, log_message_to_file
+from aiui_mcp.common import get_current_websocket, log_message_to_file
 from aiui_mcp.wizard_events import (
     FullNameSuggestionEvent,
     EmailSuggestionEvent,
@@ -37,10 +37,11 @@ def log_event(event_data: dict) -> None:
 async def send_suggestion_to_ui(suggestion_event: dict[str, Any]) -> None:
     """Send suggestion event to UI via WebSocket"""
     log_event(suggestion_event)
-    if not get_websocket_singleton():
+    websocket = get_current_websocket()
+    if not websocket:
         raise RuntimeError("The client is not connected to the WebSocket server")
 
-    await get_websocket_singleton().send(json.dumps(suggestion_event))
+    await websocket.send(json.dumps(suggestion_event))
     return
 
 

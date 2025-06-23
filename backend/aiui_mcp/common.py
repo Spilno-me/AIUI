@@ -2,22 +2,29 @@
 import datetime
 from pathlib import Path
 
+from websockets import ServerConnection
+
 
 LOG_FILE_PATH = Path("mcp.log")
 
 # Touch the log file on module import
 LOG_FILE_PATH.touch(exist_ok=True)
 
-_WEBSOCKET_SINGLETON = None
+_WEBSOCKETS: dict[str, ServerConnection] = {}
 
 
-def get_websocket_singleton():
-    return _WEBSOCKET_SINGLETON
+def get_current_websocket():
+    if not _WEBSOCKETS:
+        return None
+    return list(_WEBSOCKETS.values())[0]
 
 
-def set_websocket_singleton(websocket):
-    global _WEBSOCKET_SINGLETON
-    _WEBSOCKET_SINGLETON = websocket
+def add_websocket(websocket: ServerConnection):
+    _WEBSOCKETS[websocket.remote_address] = websocket
+
+
+def remove_websocket(websocket: ServerConnection):
+    _WEBSOCKETS.pop(websocket.remote_address)
 
 
 def log_message_to_file(message: str) -> None:
