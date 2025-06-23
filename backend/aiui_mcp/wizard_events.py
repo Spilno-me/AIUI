@@ -15,16 +15,6 @@ class WizardStep(str, Enum):
 
     WELCOME = "welcome"
     COMPANY = "company"
-    PERSONALIZATION = "personalization"
-
-
-class VibeType(str, Enum):
-    """Enum for personality vibe options"""
-
-    BUILDER = "builder"
-    DREAMER = "dreamer"
-    HACKER = "hacker"
-    VISIONARY = "visionary"
 
 
 class IndustryType(str, Enum):
@@ -120,34 +110,6 @@ class GoalsSuggestionEvent(BaseSuggestionEvent):
     suggestion: str = Field(..., min_length=10, max_length=500, description="Suggested goals description")
 
 
-class SubscribeToUpdatesSuggestionEvent(BaseSuggestionEvent):
-    """Event for suggesting subscription preference"""
-
-    event_type: Literal["subscribe_to_updates_suggestion"] = "subscribe_to_updates_suggestion"
-    step: Literal[WizardStep.COMPANY] = WizardStep.COMPANY
-    field_name: Literal["subscribeToUpdates"] = "subscribeToUpdates"
-    suggestion: bool = Field(..., description="Suggested subscription preference")
-
-
-# Personalization Step Events
-class VibeSuggestionEvent(BaseSuggestionEvent):
-    """Event for suggesting personality vibe"""
-
-    event_type: Literal["vibe_suggestion"] = "vibe_suggestion"
-    step: Literal[WizardStep.PERSONALIZATION] = WizardStep.PERSONALIZATION
-    field_name: Literal["vibe"] = "vibe"
-    suggestion: VibeType = Field(..., description="Suggested personality vibe")
-
-
-class FavoriteColorSuggestionEvent(BaseSuggestionEvent):
-    """Event for suggesting favorite color"""
-
-    event_type: Literal["favorite_color_suggestion"] = "favorite_color_suggestion"
-    step: Literal[WizardStep.PERSONALIZATION] = WizardStep.PERSONALIZATION
-    field_name: Literal["favoriteColor"] = "favoriteColor"
-    suggestion: str = Field(..., pattern=r"^#[0-9A-Fa-f]{6}$", description="Suggested color as hex value")
-
-
 # Union type for all suggestion events
 SuggestionEvent = (
     FullNameSuggestionEvent
@@ -156,9 +118,6 @@ SuggestionEvent = (
     | CompanyNameSuggestionEvent
     | NumberOfEmployeesSuggestionEvent
     | GoalsSuggestionEvent
-    | SubscribeToUpdatesSuggestionEvent
-    | VibeSuggestionEvent
-    | FavoriteColorSuggestionEvent
 )
 
 

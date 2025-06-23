@@ -12,10 +12,6 @@ export interface OnboardingData {
   numberOfEmployees: string;
   goals: string;
   subscribeToUpdates: boolean;
-  
-  // Step 3: Personalization
-  vibe: 'builder' | 'dreamer' | 'hacker' | 'visionary' | undefined;
-  favoriteColor: string;
 }
 
 export interface OnboardingState {
@@ -28,7 +24,6 @@ export interface OnboardingState {
   setCurrentStep: (step: number) => void;
   updateUserInfo: (info: Partial<Pick<OnboardingData, 'fullName' | 'email' | 'password' | 'industry'>>) => void;
   updateCompanyDetails: (details: Partial<Pick<OnboardingData, 'companyName' | 'numberOfEmployees' | 'goals' | 'subscribeToUpdates'>>) => void;
-  updatePersonalization: (personalization: Partial<Pick<OnboardingData, 'vibe' | 'favoriteColor'>>) => void;
   nextStep: () => void;
   previousStep: () => void;
   completeOnboarding: () => void;
@@ -46,8 +41,6 @@ const initialData: OnboardingData = {
   numberOfEmployees: '',
   goals: '',
   subscribeToUpdates: false,
-  vibe: undefined,
-  favoriteColor: '#3b82f6',
 };
 
 export const useOnboardingStore = create<OnboardingState>((set, get) => ({
@@ -59,7 +52,7 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
   setCurrentStep: (step: number) => {
     const { isStepAccessible } = get();
     if (isStepAccessible(step)) {
-      set({ currentStep: Math.max(1, Math.min(4, step)) });
+      set({ currentStep: Math.max(1, Math.min(3, step)) });
     }
   },
   
@@ -75,16 +68,10 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
     }));
   },
   
-  updatePersonalization: (personalization) => {
-    set((state) => ({
-      data: { ...state.data, ...personalization }
-    }));
-  },
-  
   nextStep: () => {
     const { currentStep, isStepAccessible } = get();
     const nextStepNumber = currentStep + 1;
-    if (nextStepNumber <= 4 && isStepAccessible(nextStepNumber)) {
+    if (nextStepNumber <= 3 && isStepAccessible(nextStepNumber)) {
       set({ currentStep: nextStepNumber });
     }
   },

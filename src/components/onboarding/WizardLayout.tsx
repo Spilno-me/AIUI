@@ -3,33 +3,74 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { WelcomeStep } from './WelcomeStep';
 import { CompanyStep } from './CompanyStep';
-import { PersonalizationStep } from './PersonalizationStep';
 import { Summary } from './Summary';
+import { useAISuggestions } from '@/hooks/useAISuggestions';
+import { useWebSocket } from '@/hooks/useWebSocket';
 
 const STEPS = [
   { number: 1, title: 'Welcome', description: 'Personal info' },
   { number: 2, title: 'Company', description: 'Business details' },
-  { number: 3, title: 'Personalize', description: 'Your preferences' },
-  { number: 4, title: 'Summary', description: 'Review & complete' },
+  { number: 3, title: 'Summary', description: 'Review & complete' },
 ] as const;
 
 export function WizardLayout() {
   const { currentStep, nextStep, previousStep, setCurrentStep, isStepAccessible } = useOnboardingStore();
+  const { suggestions, removeSuggestion, handleWebSocketMessage } = useAISuggestions();
+  
+  // Connect to WebSocket server
+  const { isConnected } = useWebSocket({
+    url: 'ws://localhost:8765',
+    onMessage: handleWebSocketMessage,
+    onOpen: () => console.log('WebSocket connected'),
+    onClose: () => console.log('WebSocket disconnected'),
+    onError: (error) => console.error('WebSocket error:', error)
+  });
+  
+  // Handler for accepting suggestions
+  const handleAcceptSuggestion = (fieldName: string, _value: any) => {
+    // Remove the suggestion from state after accepting
+    removeSuggestion(fieldName);
+  };
+  
+  // Handler for rejecting suggestions
+  const handleRejectSuggestion = (fieldName: string) => {
+    removeSuggestion(fieldName);
+  };
 
   const progressPercentage = ((currentStep - 1) / (STEPS.length - 1)) * 100;
 
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 1:
-        return <WelcomeStep onNext={nextStep} />;
+        return (
+          <WelcomeStep 
+            onNext={nextStep}
+            suggestions={suggestions}
+            onAcceptSuggestion={handleAcceptSuggestion}
+            onRejectSuggestion={handleRejectSuggestion}
+          />
+        );
       case 2:
-        return <CompanyStep onNext={nextStep} onPrevious={previousStep} />;
+        return (
+          <CompanyStep 
+            onNext={nextStep} 
+            onPrevious={previousStep}
+            suggestions={suggestions}
+            onAcceptSuggestion={handleAcceptSuggestion}
+            onRejectSuggestion={handleRejectSuggestion}
+          />
+        );
       case 3:
-        return <PersonalizationStep onNext={nextStep} onPrevious={previousStep} />;
-      case 4:
         return <Summary onPrevious={previousStep} />;
       default:
-        return <WelcomeStep onNext={nextStep} />;
+        return (
+          <WelcomeStep 
+            onNext={nextStep}
+            suggestions={suggestions}
+            onAcceptSuggestion={handleAcceptSuggestion}
+            onRejectSuggestion={handleRejectSuggestion}
+          />
+        );
     }
   };
 
@@ -44,6 +85,12 @@ export function WizardLayout() {
           <p className="text-gray-600 dark:text-gray-300">
             Let's vibe!
           </p>
+          {/* WebSocket connection status */}
+          <div className="mt-2">
+            <Badge variant={isConnected ? "default" : "secondary"} className="text-xs">
+              {isConnected ? "AI Assistant Connected" : "AI Assistant Disconnected"}
+            </Badge>
+          </div>
         </div>
 
         {/* Progress Section */}

@@ -3,14 +3,12 @@ AIUI MCP Server with wizard field suggestion tools.
 This server provides tools for AI to suggest values for onboarding wizard fields.
 """
 
-import datetime
 import json
-from pathlib import Path
 from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
-from aiui_mcp.common import get_websocket_singleton, log_message_to_file
+from aiui_mcp.common import get_current_websocket, log_message_to_file
 from aiui_mcp.wizard_events import (
     FullNameSuggestionEvent,
     EmailSuggestionEvent,
@@ -18,9 +16,6 @@ from aiui_mcp.wizard_events import (
     CompanyNameSuggestionEvent,
     NumberOfEmployeesSuggestionEvent,
     GoalsSuggestionEvent,
-    SubscribeToUpdatesSuggestionEvent,
-    VibeSuggestionEvent,
-    FavoriteColorSuggestionEvent,
 )
 
 mcp = FastMCP("AIUI")
@@ -39,10 +34,11 @@ def log_event(event_data: dict) -> None:
 async def send_suggestion_to_ui(suggestion_event: dict[str, Any]) -> None:
     """Send suggestion event to UI via WebSocket"""
     log_event(suggestion_event)
-    if not get_websocket_singleton():
+    websocket = get_current_websocket()
+    if not websocket:
         raise RuntimeError("The client is not connected to the WebSocket server")
 
-    await get_websocket_singleton().send(json.dumps(suggestion_event))
+    await websocket.send(json.dumps(suggestion_event))
     return
 
 
@@ -86,24 +82,3 @@ async def suggest_goals(event: GoalsSuggestionEvent) -> str:
     """Send a goals suggestion to the UI"""
     await send_suggestion_to_ui(event.model_dump())
     return "Sent goals suggestion"
-
-
-@mcp.tool()
-async def suggest_subscription_preference(event: SubscribeToUpdatesSuggestionEvent) -> str:
-    """Send a subscription preference suggestion to the UI"""
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Sent subscription preference suggestion: {event.suggestion}"
-
-
-@mcp.tool()
-async def suggest_vibe(event: VibeSuggestionEvent) -> str:
-    """Send a personality vibe suggestion to the UI"""
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Sent vibe suggestion: {event.suggestion}"
-
-
-@mcp.tool()
-async def suggest_favorite_color(event: FavoriteColorSuggestionEvent) -> str:
-    """Send a favorite color suggestion to the UI"""
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Sent color suggestion: {event.suggestion}"
