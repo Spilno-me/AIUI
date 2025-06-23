@@ -46,7 +46,12 @@ export function SuggestionTextarea({
       showSuggestion && 'ring-2 ring-green-500 border-green-500 focus:ring-green-500'
     ),
     value: showSuggestion && suggestion ? suggestion.value : children.props.value,
-    disabled: showSuggestion ? true : children.props.disabled,
+    readOnly: showSuggestion ? true : children.props.readOnly,
+    disabled: children.props.disabled,
+    style: {
+      ...children.props.style,
+      cursor: showSuggestion ? 'default' : children.props.style?.cursor
+    }
   });
 
   return (

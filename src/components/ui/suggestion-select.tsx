@@ -68,7 +68,7 @@ export function SuggestionSelect({
       <Select
         value={displayValue}
         onValueChange={!showSuggestion ? onValueChange : undefined}
-        disabled={disabled || showSuggestion}
+        disabled={disabled}
       >
         <SelectTrigger
           className={cn(

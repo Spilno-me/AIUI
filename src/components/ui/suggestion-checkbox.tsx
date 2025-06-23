@@ -64,10 +64,10 @@ export function SuggestionCheckbox({
         id={id}
         checked={displayChecked}
         onCheckedChange={!showSuggestion ? onCheckedChange : undefined}
-        disabled={disabled || showSuggestion}
+        disabled={disabled}
         className={cn(
           className,
-          showSuggestion && 'ring-2 ring-green-500 border-green-500 data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600'
+          showSuggestion && 'ring-2 ring-green-500 border-green-500 data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600 pointer-events-none'
         )}
       />
       {showSuggestion && suggestion !== undefined && (

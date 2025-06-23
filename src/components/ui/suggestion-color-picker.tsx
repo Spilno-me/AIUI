@@ -87,7 +87,7 @@ export function SuggestionColorPicker({
                 displayValue === color 
                   ? 'border-primary scale-110 shadow-lg' 
                   : 'border-gray-300 hover:scale-105',
-                showSuggestion && 'cursor-not-allowed opacity-80'
+                showSuggestion && 'cursor-not-allowed'
               )}
               style={{ backgroundColor: color }}
               data-testid={`color-${color}`}
@@ -100,7 +100,7 @@ export function SuggestionColorPicker({
             type="color"
             value={displayValue}
             onChange={(e) => handleColorSelect(e.target.value)}
-            disabled={showSuggestion}
+            readOnly={showSuggestion}
             className="w-16 h-8 p-0 border-0"
             data-testid="custom-color-input"
           />
