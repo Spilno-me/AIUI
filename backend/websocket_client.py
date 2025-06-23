@@ -12,10 +12,16 @@ async def main():
     async with websockets.connect(uri) as websocket:
         print("Connected to server!")
 
-        # Receive message from server
-        message = await websocket.recv()
-        message = json.loads(message)
-        print(json.dumps(message, indent=2))
+        # Listen for messages perpetually
+        try:
+            while True:
+                message = await websocket.recv()
+                message = json.loads(message)
+                print(json.dumps(message, indent=2))
+        except websockets.exceptions.ConnectionClosed:
+            print("Connection closed by server")
+        except KeyboardInterrupt:
+            print("Disconnected by user")
 
 
 if __name__ == "__main__":

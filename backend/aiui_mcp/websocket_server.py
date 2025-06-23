@@ -1,14 +1,14 @@
 import asyncio
 import websockets
 
-
-WEBSOCKET_SINGLETON = None
+from aiui_mcp import common
 
 
 async def handle_client(websocket):
     """Handle a connected WebSocket client."""
-    global WEBSOCKET_SINGLETON
-    WEBSOCKET_SINGLETON = websocket  # For the purposes of the PoC we are assuming there is only one client
+    common.set_websocket_singleton(websocket)  # For the purposes of the PoC we are assuming there is only one client
+    common.log_message_to_file(f"WEBSOCKET_SINGLETON: {common.get_websocket_singleton()}")
+
     print(f"Client connected from {websocket.remote_address}")
 
     try:

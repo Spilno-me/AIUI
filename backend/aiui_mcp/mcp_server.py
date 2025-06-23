@@ -3,13 +3,14 @@ AIUI MCP Server with wizard field suggestion tools.
 This server provides tools for AI to suggest values for onboarding wizard fields.
 """
 
+import datetime
 import json
 from pathlib import Path
 from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
-from aiui_mcp.websocket_server import WEBSOCKET_SINGLETON
+from aiui_mcp.common import get_websocket_singleton, log_message_to_file
 from aiui_mcp.wizard_events import (
     FullNameSuggestionEvent,
     EmailSuggestionEvent,
@@ -24,12 +25,6 @@ from aiui_mcp.wizard_events import (
 
 mcp = FastMCP("AIUI")
 
-# Log file path
-LOG_FILE_PATH = Path("mcp.log")
-
-# Touch the log file on module import
-LOG_FILE_PATH.touch(exist_ok=True)
-
 
 async def run_mcp_server():
     print("Starting MCP server...")
@@ -38,17 +33,16 @@ async def run_mcp_server():
 
 def log_event(event_data: dict) -> None:
     """Log event data to mcp.log file"""
-    with open(LOG_FILE_PATH, "a", encoding="utf-8") as f:
-        f.write(json.dumps(event_data, indent=2) + "\n")
+    log_message_to_file(json.dumps(event_data, indent=2))
 
 
 async def send_suggestion_to_ui(suggestion_event: dict[str, Any]) -> None:
     """Send suggestion event to UI via WebSocket"""
     log_event(suggestion_event)
-    if not WEBSOCKET_SINGLETON:
+    if not get_websocket_singleton():
         raise RuntimeError("The client is not connected to the WebSocket server")
 
-    await WEBSOCKET_SINGLETON.send(json.dumps(suggestion_event))
+    await get_websocket_singleton().send(json.dumps(suggestion_event))
     return
 
 
