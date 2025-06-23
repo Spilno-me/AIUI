@@ -14,13 +14,5 @@ export const companyStepSchema = z.object({
   subscribeToUpdates: z.boolean(),
 });
 
-export const personalizationStepSchema = z.object({
-  vibe: z.enum(['builder', 'dreamer', 'hacker', 'visionary'], {
-    required_error: 'Please select your vibe',
-  }),
-  favoriteColor: z.string().min(1, 'Please select a favorite color'),
-});
-
 export type WelcomeStepData = z.infer<typeof welcomeStepSchema>;
-export type CompanyStepData = z.infer<typeof companyStepSchema>;
-export type PersonalizationStepData = z.infer<typeof personalizationStepSchema>; 
+export type CompanyStepData = z.infer<typeof companyStepSchema>; 

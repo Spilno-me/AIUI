@@ -66,20 +66,21 @@ backend/
 ### Key Features
 
 #### Onboarding Wizard
-- 4-step progressive form with validation gates
-- Steps: Welcome → Company → Personalization → Summary
+- 3-step progressive form with validation gates
+- Steps: Welcome → Company → Summary
 - Sequential unlocking (completed steps enable next step)
 - Persistent state across navigation using Zustand
 - Form validation with Zod schemas
 
 #### AI Integration
 - MCP tools for suggesting form field values:
-  - `suggest_name`: Generate person names
+  - `suggest_full_name`: Generate person names
   - `suggest_email`: Create email addresses
   - `suggest_industry`: Suggest industry types
-  - `suggest_company_info`: Generate company details
-  - `suggest_personality_vibe`: Create personality descriptions
-  - `suggest_color`: Suggest color preferences
+  - `suggest_company_name`: Generate company names
+  - `suggest_employee_count`: Suggest employee ranges
+  - `suggest_goals`: Generate company goals
+  - `suggest_subscription_preference`: Suggest subscription preferences
 - WebSocket enables real-time bidirectional communication
 - Event-driven architecture with typed event models
 

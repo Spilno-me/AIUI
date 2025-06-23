@@ -3,7 +3,6 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { WelcomeStep } from './WelcomeStep';
 import { CompanyStep } from './CompanyStep';
-import { PersonalizationStep } from './PersonalizationStep';
 import { Summary } from './Summary';
 import { useAISuggestions } from '@/hooks/useAISuggestions';
 import { useWebSocket } from '@/hooks/useWebSocket';
@@ -11,8 +10,7 @@ import { useWebSocket } from '@/hooks/useWebSocket';
 const STEPS = [
   { number: 1, title: 'Welcome', description: 'Personal info' },
   { number: 2, title: 'Company', description: 'Business details' },
-  { number: 3, title: 'Personalize', description: 'Your preferences' },
-  { number: 4, title: 'Summary', description: 'Review & complete' },
+  { number: 3, title: 'Summary', description: 'Review & complete' },
 ] as const;
 
 export function WizardLayout() {
@@ -63,16 +61,6 @@ export function WizardLayout() {
           />
         );
       case 3:
-        return (
-          <PersonalizationStep 
-            onNext={nextStep} 
-            onPrevious={previousStep}
-            suggestions={suggestions}
-            onAcceptSuggestion={handleAcceptSuggestion}
-            onRejectSuggestion={handleRejectSuggestion}
-          />
-        );
-      case 4:
         return <Summary onPrevious={previousStep} />;
       default:
         return (

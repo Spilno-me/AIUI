@@ -16,9 +16,6 @@ from aiui_mcp.wizard_events import (
     CompanyNameSuggestionEvent,
     NumberOfEmployeesSuggestionEvent,
     GoalsSuggestionEvent,
-    SubscribeToUpdatesSuggestionEvent,
-    VibeSuggestionEvent,
-    FavoriteColorSuggestionEvent,
 )
 
 mcp = FastMCP("AIUI")
@@ -85,24 +82,3 @@ async def suggest_goals(event: GoalsSuggestionEvent) -> str:
     """Send a goals suggestion to the UI"""
     await send_suggestion_to_ui(event.model_dump())
     return "Sent goals suggestion"
-
-
-@mcp.tool()
-async def suggest_subscription_preference(event: SubscribeToUpdatesSuggestionEvent) -> str:
-    """Send a subscription preference suggestion to the UI"""
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Sent subscription preference suggestion: {event.suggestion}"
-
-
-@mcp.tool()
-async def suggest_vibe(event: VibeSuggestionEvent) -> str:
-    """Send a personality vibe suggestion to the UI"""
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Sent vibe suggestion: {event.suggestion}"
-
-
-@mcp.tool()
-async def suggest_favorite_color(event: FavoriteColorSuggestionEvent) -> str:
-    """Send a favorite color suggestion to the UI"""
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Sent color suggestion: {event.suggestion}"

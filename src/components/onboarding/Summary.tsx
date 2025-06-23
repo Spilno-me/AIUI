@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useOnboardingStore } from '@/store/useOnboardingStore';
-import { CheckCircle, User, Building, Palette, Mail, Users, Target, Bell } from 'lucide-react';
+import { CheckCircle, User, Building, Mail, Users, Target, Bell } from 'lucide-react';
 
 interface SummaryProps {
   onPrevious: () => void;
@@ -25,25 +25,6 @@ export function Summary({ onPrevious }: SummaryProps) {
     setShowSuccessDialog(false);
   };
 
-  const getVibeEmoji = (vibe: string | undefined) => {
-    const vibeMap = {
-      builder: '🔨',
-      dreamer: '💭',
-      hacker: '⚡',
-      visionary: '🔮',
-    };
-    return vibeMap[vibe as keyof typeof vibeMap] || '✨';
-  };
-
-  const getVibeLabel = (vibe: string | undefined) => {
-    const vibeMap = {
-      builder: 'Builder',
-      dreamer: 'Dreamer',
-      hacker: 'Hacker',
-      visionary: 'Visionary',
-    };
-    return vibeMap[vibe as keyof typeof vibeMap] || 'Not specified';
-  };
 
   return (
     <>
@@ -116,32 +97,6 @@ export function Summary({ onPrevious }: SummaryProps) {
             </div>
           </div>
 
-          {/* Personalization */}
-          <div className="space-y-3">
-            <div className="flex items-center space-x-2">
-              <Palette className="h-5 w-5 text-primary" />
-              <h3 className="text-lg font-semibold">Personalization</h3>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-7">
-              <div>
-                <p className="text-sm text-muted-foreground">Your Vibe</p>
-                <p className="font-medium flex items-center">
-                  <span className="text-lg mr-2">{getVibeEmoji(data.vibe)}</span>
-                  {getVibeLabel(data.vibe)}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Favorite Color</p>
-                <div className="flex items-center space-x-2">
-                  <div 
-                    className="w-6 h-6 rounded-full border border-gray-300"
-                    style={{ backgroundColor: data.favoriteColor }}
-                  />
-                  <p className="font-medium font-mono">{data.favoriteColor}</p>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <Alert>
             <CheckCircle className="h-4 w-4" />
