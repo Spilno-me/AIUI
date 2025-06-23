@@ -3,9 +3,7 @@ AIUI MCP Server with wizard field suggestion tools.
 This server provides tools for AI to suggest values for onboarding wizard fields.
 """
 
-import datetime
 import json
-from pathlib import Path
 from typing import Any
 
 from mcp.server.fastmcp import FastMCP
