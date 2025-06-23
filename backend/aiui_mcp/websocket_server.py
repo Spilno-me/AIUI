@@ -21,18 +21,10 @@ async def handle_client(websocket):
         print(f"Connection with {websocket.remote_address} closed")
 
 
-async def main():
-    """Start the WebSocket server."""
+async def run_websocket_server():
     print("Starting WebSocket server on ws://localhost:8765")
 
     # Start server on localhost:8765
     async with websockets.serve(handle_client, "localhost", 8765):
         print("Server is running. Press Ctrl+C to stop.")
         await asyncio.Future()  # Run forever
-
-
-if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        print("\nServer stopped.")

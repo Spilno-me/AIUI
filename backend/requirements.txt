@@ -1,3 +1,4 @@
+anyio
 mcp
 pydantic
 python-dotenv

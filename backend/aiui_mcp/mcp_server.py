@@ -31,6 +31,10 @@ LOG_FILE_PATH = Path("mcp.log")
 # Touch the log file on module import
 LOG_FILE_PATH.touch(exist_ok=True)
 
+async def run_mcp_server():
+    print("Starting MCP server...")
+    await mcp.run_stdio_async()
+
 
 def log_event(event_data: dict) -> None:
     """Log event data to mcp.log file"""
