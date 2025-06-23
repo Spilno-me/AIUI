@@ -2,11 +2,13 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { RadioGroupItem } from '@/components/ui/radio-group';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { useOnboardingStore } from '@/store/useOnboardingStore';
 import { personalizationStepSchema, type PersonalizationStepData } from '@/lib/validationSchemas';
+import { SuggestionRadioGroup } from '@/components/ui/suggestion-radio-group';
+import { SuggestionColorPicker } from '@/components/ui/suggestion-color-picker';
+import { useAISuggestions } from '@/hooks/useAISuggestions';
 
 const VIBE_OPTIONS = [
   {
@@ -35,23 +37,16 @@ const VIBE_OPTIONS = [
   },
 ] as const;
 
-const PRESET_COLORS = [
-  '#3b82f6', // Blue
-  '#10b981', // Green
-  '#f59e0b', // Yellow
-  '#ef4444', // Red
-  '#8b5cf6', // Purple
-  '#f97316', // Orange
-  '#06b6d4', // Cyan
-  '#84cc16', // Lime
-] as const;
 
 interface PersonalizationStepProps {
   onNext: () => void;
   onPrevious: () => void;
+  suggestions: ReturnType<typeof useAISuggestions>['suggestions'];
+  onAcceptSuggestion: (fieldName: string, value: any) => void;
+  onRejectSuggestion: (fieldName: string) => void;
 }
 
-export function PersonalizationStep({ onNext, onPrevious }: PersonalizationStepProps) {
+export function PersonalizationStep({ onNext, onPrevious, suggestions, onAcceptSuggestion, onRejectSuggestion }: PersonalizationStepProps) {
   const { data, updatePersonalization, markStepCompleted } = useOnboardingStore();
   
   const form = useForm<PersonalizationStepData>({
@@ -89,11 +84,17 @@ export function PersonalizationStep({ onNext, onPrevious }: PersonalizationStepP
                     Choose the personality that best describes you.
                   </FormDescription>
                   <FormControl>
-                    <RadioGroup
+                    <SuggestionRadioGroup
+                      value={field.value}
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      suggestion={suggestions['vibe']}
+                      onAccept={(value) => {
+                        field.onChange(value);
+                        onAcceptSuggestion('vibe', value);
+                      }}
+                      onReject={() => onRejectSuggestion('vibe')}
                       className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2"
-                      data-testid="vibe-radio-group"
+                      defaultValue={field.value}
                     >
                       {VIBE_OPTIONS.map((option) => (
                         <FormItem key={option.value} className="flex items-center space-x-3 space-y-0">
@@ -113,7 +114,7 @@ export function PersonalizationStep({ onNext, onPrevious }: PersonalizationStepP
                           </div>
                         </FormItem>
                       ))}
-                    </RadioGroup>
+                    </SuggestionRadioGroup>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -130,37 +131,16 @@ export function PersonalizationStep({ onNext, onPrevious }: PersonalizationStepP
                     Pick a color that represents you - we'll use it to personalize your interface.
                   </FormDescription>
                   <FormControl>
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-8 gap-2">
-                        {PRESET_COLORS.map((color) => (
-                          <button
-                            key={color}
-                            type="button"
-                            onClick={() => field.onChange(color)}
-                            className={`w-8 h-8 rounded-full border-2 transition-all ${
-                              field.value === color 
-                                ? 'border-primary scale-110 shadow-lg' 
-                                : 'border-gray-300 hover:scale-105'
-                            }`}
-                            style={{ backgroundColor: color }}
-                            data-testid={`color-${color}`}
-                          />
-                        ))}
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm text-muted-foreground">Custom:</span>
-                        <Input
-                          type="color"
-                          value={field.value}
-                          onChange={(e) => field.onChange(e.target.value)}
-                          className="w-16 h-8 p-0 border-0"
-                          data-testid="custom-color-input"
-                        />
-                        <span className="text-sm font-mono text-muted-foreground">
-                          {field.value}
-                        </span>
-                      </div>
-                    </div>
+                    <SuggestionColorPicker
+                      value={field.value}
+                      onChange={field.onChange}
+                      suggestion={suggestions['favoriteColor']}
+                      onAccept={(value) => {
+                        field.onChange(value);
+                        onAcceptSuggestion('favoriteColor', value);
+                      }}
+                      onReject={() => onRejectSuggestion('favoriteColor')}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

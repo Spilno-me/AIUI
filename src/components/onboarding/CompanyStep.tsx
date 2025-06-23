@@ -3,12 +3,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { SelectItem } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { useOnboardingStore } from '@/store/useOnboardingStore';
 import { companyStepSchema, type CompanyStepData } from '@/lib/validationSchemas';
+import { SuggestionInput } from '@/components/ui/suggestion-input';
+import { SuggestionSelect } from '@/components/ui/suggestion-select';
+import { SuggestionTextarea } from '@/components/ui/suggestion-textarea';
+import { SuggestionCheckbox } from '@/components/ui/suggestion-checkbox';
+import { useAISuggestions } from '@/hooks/useAISuggestions';
 
 const EMPLOYEE_RANGES = [
   '1-10',
@@ -22,9 +26,12 @@ const EMPLOYEE_RANGES = [
 interface CompanyStepProps {
   onNext: () => void;
   onPrevious: () => void;
+  suggestions: ReturnType<typeof useAISuggestions>['suggestions'];
+  onAcceptSuggestion: (fieldName: string, value: any) => void;
+  onRejectSuggestion: (fieldName: string) => void;
 }
 
-export function CompanyStep({ onNext, onPrevious }: CompanyStepProps) {
+export function CompanyStep({ onNext, onPrevious, suggestions, onAcceptSuggestion, onRejectSuggestion }: CompanyStepProps) {
   const { data, updateCompanyDetails, markStepCompleted } = useOnboardingStore();
   
   const form = useForm<CompanyStepData>({
@@ -61,11 +68,20 @@ export function CompanyStep({ onNext, onPrevious }: CompanyStepProps) {
                 <FormItem>
                   <FormLabel>Company Name *</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="Enter your company name" 
-                      {...field} 
-                      data-testid="companyName-input"
-                    />
+                    <SuggestionInput
+                      suggestion={suggestions['companyName']}
+                      onAccept={(value) => {
+                        field.onChange(value);
+                        onAcceptSuggestion('companyName', value);
+                      }}
+                      onReject={() => onRejectSuggestion('companyName')}
+                    >
+                      <Input 
+                        placeholder="Enter your company name" 
+                        {...field} 
+                        data-testid="companyName-input"
+                      />
+                    </SuggestionInput>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -78,20 +94,25 @@ export function CompanyStep({ onNext, onPrevious }: CompanyStepProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Number of Employees *</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger data-testid="numberOfEmployees-select">
-                        <SelectValue placeholder="Select company size" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
+                  <FormControl>
+                    <SuggestionSelect
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      suggestion={suggestions['numberOfEmployees']}
+                      onAccept={(value) => {
+                        field.onChange(value);
+                        onAcceptSuggestion('numberOfEmployees', value);
+                      }}
+                      onReject={() => onRejectSuggestion('numberOfEmployees')}
+                      placeholder="Select company size"
+                    >
                       {EMPLOYEE_RANGES.map((range) => (
                         <SelectItem key={range} value={range}>
                           {range} employees
                         </SelectItem>
                       ))}
-                    </SelectContent>
-                  </Select>
+                    </SuggestionSelect>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -104,12 +125,21 @@ export function CompanyStep({ onNext, onPrevious }: CompanyStepProps) {
                 <FormItem>
                   <FormLabel>What are your main goals? *</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Tell us about your objectives and what you hope to achieve..."
-                      className="min-h-[120px]"
-                      {...field}
-                      data-testid="goals-textarea"
-                    />
+                    <SuggestionTextarea
+                      suggestion={suggestions['goals']}
+                      onAccept={(value) => {
+                        field.onChange(value);
+                        onAcceptSuggestion('goals', value);
+                      }}
+                      onReject={() => onRejectSuggestion('goals')}
+                    >
+                      <Textarea
+                        placeholder="Tell us about your objectives and what you hope to achieve..."
+                        className="min-h-[120px]"
+                        {...field}
+                        data-testid="goals-textarea"
+                      />
+                    </SuggestionTextarea>
                   </FormControl>
                   <FormDescription>
                     Share your primary objectives so we can help you achieve them.
@@ -125,10 +155,19 @@ export function CompanyStep({ onNext, onPrevious }: CompanyStepProps) {
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-lg">
                   <FormControl>
-                    <Checkbox
+                    <SuggestionCheckbox
                       checked={field.value}
                       onCheckedChange={field.onChange}
-                      data-testid="subscribeToUpdates-checkbox"
+                      suggestion={suggestions['subscribeToUpdates'] ? {
+                        value: Boolean(suggestions['subscribeToUpdates'].value),
+                        reasoning: suggestions['subscribeToUpdates'].reasoning
+                      } : undefined}
+                      onAccept={(value) => {
+                        field.onChange(value);
+                        onAcceptSuggestion('subscribeToUpdates', value);
+                      }}
+                      onReject={() => onRejectSuggestion('subscribeToUpdates')}
+                      id="subscribeToUpdates"
                     />
                   </FormControl>
                   <div className="space-y-1 leading-none">
