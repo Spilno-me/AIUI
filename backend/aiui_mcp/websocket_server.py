@@ -1,34 +1,31 @@
 import asyncio
 import websockets
 
+from aiui_mcp.common import get_websocket_singleton, log_message_to_file, set_websocket_singleton
+
+
 async def handle_client(websocket):
     """Handle a connected WebSocket client."""
+    set_websocket_singleton(websocket)  # For the purposes of the PoC we are assuming there is only one client
+    log_message_to_file(f"WEBSOCKET_SINGLETON: {get_websocket_singleton()}")
+
     print(f"Client connected from {websocket.remote_address}")
-    
+
     try:
-        # Send "hello world" to the client
-        await websocket.send("hello world")
-        print("Sent 'hello world' to client")
-        
-        # Keep connection alive to demonstrate it works
-        await asyncio.sleep(1)
-        
+        # Listen for messages from the client
+        async for message in websocket:
+            print(f"Received message: {message}")
+
     except websockets.exceptions.ConnectionClosed:
         print("Client disconnected")
     finally:
         print(f"Connection with {websocket.remote_address} closed")
 
-async def main():
-    """Start the WebSocket server."""
+
+async def run_websocket_server():
     print("Starting WebSocket server on ws://localhost:8765")
-    
+
     # Start server on localhost:8765
     async with websockets.serve(handle_client, "localhost", 8765):
         print("Server is running. Press Ctrl+C to stop.")
         await asyncio.Future()  # Run forever
-
-if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        print("\nServer stopped.")

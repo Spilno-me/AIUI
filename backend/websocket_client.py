@@ -1,24 +1,28 @@
-import asyncio
+import anyio
+import json
+
 import websockets
 
-async def client():
-    """Connect to WebSocket server and receive messages."""
+
+async def main():
     uri = "ws://localhost:8765"
-    
+
     print(f"Connecting to {uri}...")
-    
-    try:
-        async with websockets.connect(uri) as websocket:
-            print("Connected to server!")
-            
-            # Receive message from server
-            message = await websocket.recv()
-            print(message)
-            
-    except ConnectionRefusedError:
-        print("Error: Could not connect to server. Make sure the server is running.")
-    except Exception as e:
-        print(f"Error: {e}")
+
+    async with websockets.connect(uri) as websocket:
+        print("Connected to server!")
+
+        # Listen for messages perpetually
+        try:
+            while True:
+                message = await websocket.recv()
+                message = json.loads(message)
+                print(json.dumps(message, indent=2))
+        except websockets.exceptions.ConnectionClosed:
+            print("Connection closed by server")
+        except KeyboardInterrupt:
+            print("Disconnected by user")
+
 
 if __name__ == "__main__":
-    asyncio.run(client())
+    anyio.run(main)
