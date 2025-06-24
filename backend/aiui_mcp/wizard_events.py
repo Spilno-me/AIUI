@@ -13,34 +13,40 @@ from pydantic import BaseModel, Field
 class WizardStep(str, Enum):
     """Enum for wizard steps"""
 
-    WELCOME = "welcome"
-    COMPANY = "company"
+    FACILITY = "facility"
+    EMISSIONS = "emissions"
+    COMPLIANCE = "compliance"
+    ADDITIONAL = "additional"
 
 
 class IndustryType(str, Enum):
-    """Enum for industry options"""
+    """Enum for industry types"""
 
-    TECHNOLOGY = "Technology"
-    HEALTHCARE = "Healthcare"
-    FINANCE = "Finance"
-    EDUCATION = "Education"
-    MANUFACTURING = "Manufacturing"
-    RETAIL = "Retail"
-    CONSULTING = "Consulting"
-    MARKETING = "Marketing"
-    REAL_ESTATE = "Real Estate"
-    OTHER = "Other"
+    PETROCHEMICAL = "petrochemical"
+    MANUFACTURING = "manufacturing"
+    POWER_GENERATION = "power_generation"
+    REFINING = "refining"
+    CHEMICAL = "chemical"
+    OTHER = "other"
 
 
-class EmployeeRangeType(str, Enum):
-    """Enum for employee count ranges"""
+class EmissionUnitType(str, Enum):
+    """Enum for emission unit types"""
 
-    RANGE_1_10 = "1-10"
-    RANGE_11_50 = "11-50"
-    RANGE_51_200 = "51-200"
-    RANGE_201_500 = "201-500"
-    RANGE_501_1000 = "501-1000"
-    RANGE_1000_PLUS = "1000+"
+    STORAGE_TANK = "storage_tank"
+    COMBUSTION_SOURCE = "combustion_source"
+    PROCESS_VENT = "process_vent"
+    FUGITIVE = "fugitive"
+    OTHER = "other"
+
+
+class ComplianceMethodType(str, Enum):
+    """Enum for compliance monitoring methods"""
+
+    CONTINUOUS = "continuous"
+    PERIODIC = "periodic"
+    PREDICTIVE = "predictive"
+    PARAMETRIC = "parametric"
 
 
 # Base event model
@@ -54,70 +60,91 @@ class BaseSuggestionEvent(BaseModel):
     reasoning: str = Field(..., description="Reasoning for the suggestion")
 
 
-# Welcome Step Events
-class FullNameSuggestionEvent(BaseSuggestionEvent):
-    """Event for suggesting full name"""
+# Facility Information Step Events
+class FacilityNameSuggestionEvent(BaseSuggestionEvent):
+    """Event for suggesting facility name"""
 
-    event_type: Literal["full_name_suggestion"] = "full_name_suggestion"
-    step: Literal[WizardStep.WELCOME] = WizardStep.WELCOME
-    field_name: Literal["fullName"] = "fullName"
-    suggestion: str = Field(..., min_length=2, max_length=50, description="Suggested full name")
-
-
-class EmailSuggestionEvent(BaseSuggestionEvent):
-    """Event for suggesting email address"""
-
-    event_type: Literal["email_suggestion"] = "email_suggestion"
-    step: Literal[WizardStep.WELCOME] = WizardStep.WELCOME
-    field_name: Literal["email"] = "email"
-    suggestion: str = Field(..., description="Suggested email address")
+    event_type: Literal["facility_name_suggestion"] = "facility_name_suggestion"
+    step: Literal[WizardStep.FACILITY] = WizardStep.FACILITY
+    field_name: Literal["facilityName"] = "facilityName"
+    suggestion: str = Field(..., min_length=3, max_length=100, description="Suggested facility name")
 
 
-class IndustrySuggestionEvent(BaseSuggestionEvent):
-    """Event for suggesting industry"""
+class OperatorNameSuggestionEvent(BaseSuggestionEvent):
+    """Event for suggesting operator name"""
 
-    event_type: Literal["industry_suggestion"] = "industry_suggestion"
-    step: Literal[WizardStep.WELCOME] = WizardStep.WELCOME
-    field_name: Literal["industry"] = "industry"
-    suggestion: IndustryType = Field(..., description="Suggested industry")
-
-
-# Company Step Events
-class CompanyNameSuggestionEvent(BaseSuggestionEvent):
-    """Event for suggesting company name"""
-
-    event_type: Literal["company_name_suggestion"] = "company_name_suggestion"
-    step: Literal[WizardStep.COMPANY] = WizardStep.COMPANY
-    field_name: Literal["companyName"] = "companyName"
-    suggestion: str = Field(..., min_length=2, max_length=100, description="Suggested company name")
+    event_type: Literal["operator_name_suggestion"] = "operator_name_suggestion"
+    step: Literal[WizardStep.FACILITY] = WizardStep.FACILITY
+    field_name: Literal["operatorName"] = "operatorName"
+    suggestion: str = Field(..., min_length=2, max_length=100, description="Suggested operator name")
 
 
-class NumberOfEmployeesSuggestionEvent(BaseSuggestionEvent):
-    """Event for suggesting number of employees"""
+class FacilityAddressSuggestionEvent(BaseSuggestionEvent):
+    """Event for suggesting facility address"""
 
-    event_type: Literal["number_of_employees_suggestion"] = "number_of_employees_suggestion"
-    step: Literal[WizardStep.COMPANY] = WizardStep.COMPANY
-    field_name: Literal["numberOfEmployees"] = "numberOfEmployees"
-    suggestion: EmployeeRangeType = Field(..., description="Suggested employee count range")
+    event_type: Literal["facility_address_suggestion"] = "facility_address_suggestion"
+    step: Literal[WizardStep.FACILITY] = WizardStep.FACILITY
+    field_name: Literal["facilityAddress"] = "facilityAddress"
+    suggestion: str = Field(..., min_length=10, max_length=200, description="Suggested facility address")
 
 
-class GoalsSuggestionEvent(BaseSuggestionEvent):
-    """Event for suggesting goals"""
+class CountySuggestionEvent(BaseSuggestionEvent):
+    """Event for suggesting county"""
 
-    event_type: Literal["goals_suggestion"] = "goals_suggestion"
-    step: Literal[WizardStep.COMPANY] = WizardStep.COMPANY
-    field_name: Literal["goals"] = "goals"
-    suggestion: str = Field(..., min_length=10, max_length=500, description="Suggested goals description")
+    event_type: Literal["county_suggestion"] = "county_suggestion"
+    step: Literal[WizardStep.FACILITY] = WizardStep.FACILITY
+    field_name: Literal["county"] = "county"
+    suggestion: str = Field(..., description="Suggested county")
+
+
+class IndustryTypeSuggestionEvent(BaseSuggestionEvent):
+    """Event for suggesting industry type"""
+
+    event_type: Literal["industry_type_suggestion"] = "industry_type_suggestion"
+    step: Literal[WizardStep.FACILITY] = WizardStep.FACILITY
+    field_name: Literal["industryType"] = "industryType"
+    suggestion: IndustryType = Field(..., description="Suggested industry type")
+
+
+# Emission Units Step Events
+class PrimaryOperationsSuggestionEvent(BaseSuggestionEvent):
+    """Event for suggesting primary operations"""
+
+    event_type: Literal["primary_operations_suggestion"] = "primary_operations_suggestion"
+    step: Literal[WizardStep.EMISSIONS] = WizardStep.EMISSIONS
+    field_name: Literal["primaryOperations"] = "primaryOperations"
+    suggestion: str = Field(..., min_length=20, max_length=500, description="Suggested primary operations description")
+
+
+class EstimatedEmissionsSuggestionEvent(BaseSuggestionEvent):
+    """Event for suggesting estimated annual emissions"""
+
+    event_type: Literal["estimated_emissions_suggestion"] = "estimated_emissions_suggestion"
+    step: Literal[WizardStep.EMISSIONS] = WizardStep.EMISSIONS
+    field_name: Literal["estimatedAnnualEmissions"] = "estimatedAnnualEmissions"
+    suggestion: str = Field(..., description="Suggested annual emissions estimate")
+
+
+# Compliance Step Events
+class ComplianceMethodSuggestionEvent(BaseSuggestionEvent):
+    """Event for suggesting compliance method"""
+
+    event_type: Literal["compliance_method_suggestion"] = "compliance_method_suggestion"
+    step: Literal[WizardStep.COMPLIANCE] = WizardStep.COMPLIANCE
+    field_name: Literal["complianceMethod"] = "complianceMethod"
+    suggestion: ComplianceMethodType = Field(..., description="Suggested compliance method")
 
 
 # Union type for all suggestion events
 SuggestionEvent = (
-    FullNameSuggestionEvent
-    | EmailSuggestionEvent
-    | IndustrySuggestionEvent
-    | CompanyNameSuggestionEvent
-    | NumberOfEmployeesSuggestionEvent
-    | GoalsSuggestionEvent
+    FacilityNameSuggestionEvent
+    | OperatorNameSuggestionEvent
+    | FacilityAddressSuggestionEvent
+    | CountySuggestionEvent
+    | IndustryTypeSuggestionEvent
+    | PrimaryOperationsSuggestionEvent
+    | EstimatedEmissionsSuggestionEvent
+    | ComplianceMethodSuggestionEvent
 )
 
 

@@ -1,4 +1,4 @@
-import { OnboardingWizard } from '@/components/onboarding/OnboardingWizard';
+import { PermitApplicationWizard } from '@/components/onboarding/OnboardingWizard';
 import { useWebSocket } from '@/hooks/useWebSocket';
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
           WebSocket disconnected
         </div>
       )}
-      <OnboardingWizard />
+      <PermitApplicationWizard />
     </>
   );
 }
