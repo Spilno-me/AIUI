@@ -1,20 +1,22 @@
-import { useOnboardingStore } from '@/store/useOnboardingStore';
+import { usePermitApplicationStore } from '@/store/usePermitApplicationStore';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { WelcomeStep } from './WelcomeStep';
-import { CompanyStep } from './CompanyStep';
+import { FacilityStep } from './FacilityStep';
+import { EmissionUnitsStep } from './EmissionUnitsStep';
+import { ComplianceStep } from './ComplianceStep';
 import { Summary } from './Summary';
 import { useAISuggestions } from '@/hooks/useAISuggestions';
 import { useWebSocket } from '@/hooks/useWebSocket';
 
 const STEPS = [
-  { number: 1, title: 'Welcome', description: 'Personal info' },
-  { number: 2, title: 'Company', description: 'Business details' },
-  { number: 3, title: 'Summary', description: 'Review & complete' },
+  { number: 1, title: 'Facility Info', description: 'Location & operator' },
+  { number: 2, title: 'Emission Units', description: 'Operations & sources' },
+  { number: 3, title: 'Compliance', description: 'Monitoring & requirements' },
+  { number: 4, title: 'Summary', description: 'Review & submit' },
 ] as const;
 
 export function WizardLayout() {
-  const { currentStep, nextStep, previousStep, setCurrentStep, isStepAccessible } = useOnboardingStore();
+  const { currentStep, nextStep, previousStep, setCurrentStep, isStepAccessible } = usePermitApplicationStore();
   const { suggestions, removeSuggestion, handleWebSocketMessage } = useAISuggestions();
   
   // Connect to WebSocket server
@@ -43,7 +45,7 @@ export function WizardLayout() {
     switch (currentStep) {
       case 1:
         return (
-          <WelcomeStep 
+          <FacilityStep 
             onNext={nextStep}
             suggestions={suggestions}
             onAcceptSuggestion={handleAcceptSuggestion}
@@ -52,7 +54,7 @@ export function WizardLayout() {
         );
       case 2:
         return (
-          <CompanyStep 
+          <EmissionUnitsStep 
             onNext={nextStep} 
             onPrevious={previousStep}
             suggestions={suggestions}
@@ -61,10 +63,20 @@ export function WizardLayout() {
           />
         );
       case 3:
+        return (
+          <ComplianceStep 
+            onNext={nextStep} 
+            onPrevious={previousStep}
+            suggestions={suggestions}
+            onAcceptSuggestion={handleAcceptSuggestion}
+            onRejectSuggestion={handleRejectSuggestion}
+          />
+        );
+      case 4:
         return <Summary onPrevious={previousStep} />;
       default:
         return (
-          <WelcomeStep 
+          <FacilityStep 
             onNext={nextStep}
             suggestions={suggestions}
             onAcceptSuggestion={handleAcceptSuggestion}
@@ -80,10 +92,10 @@ export function WizardLayout() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Welcome to AIUI
+            Federal Operating Permit Application
           </h1>
           <p className="text-gray-600 dark:text-gray-300">
-            Let's vibe!
+            Texas Clean Air Act Compliance Wizard
           </p>
           {/* WebSocket connection status */}
           <div className="mt-2">
@@ -169,9 +181,7 @@ export function WizardLayout() {
         {/* Footer */}
         <div className="text-center mt-8 text-sm text-gray-500 dark:text-gray-400">
           <p>
-            <a href="#" className="text-primary hover:underline">
-              Vibe with Spilno
-            </a>
+            Texas Commission on Environmental Quality (TCEQ) Compliance
           </p>
         </div>
       </div>

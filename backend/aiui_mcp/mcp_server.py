@@ -1,6 +1,6 @@
 """
-AIUI MCP Server with wizard field suggestion tools.
-This server provides tools for AI to suggest values for onboarding wizard fields.
+AIUI MCP Server with permit application field suggestion tools.
+This server provides tools for AI to suggest values for permit application wizard fields.
 """
 
 import json
@@ -10,12 +10,14 @@ from mcp.server.fastmcp import FastMCP
 
 from aiui_mcp.common import get_current_websocket, log_message_to_file
 from aiui_mcp.wizard_events import (
-    FullNameSuggestionEvent,
-    EmailSuggestionEvent,
-    IndustrySuggestionEvent,
-    CompanyNameSuggestionEvent,
-    NumberOfEmployeesSuggestionEvent,
-    GoalsSuggestionEvent,
+    FacilityNameSuggestionEvent,
+    OperatorNameSuggestionEvent,
+    FacilityAddressSuggestionEvent,
+    CountySuggestionEvent,
+    IndustryTypeSuggestionEvent,
+    PrimaryOperationsSuggestionEvent,
+    EstimatedEmissionsSuggestionEvent,
+    ComplianceMethodSuggestionEvent,
 )
 
 mcp = FastMCP(
@@ -23,7 +25,7 @@ mcp = FastMCP(
     instructions=(
         "This MCP server (AIUI) should be used WHENEVER the user asks to fill in any kind of form. When users mention "
         "form filling, they always imply using AIUI - that's the whole purpose of this setup (and the users are aware "
-        "of this)."
+        "of this). This server specializes in Federal Operating Permit applications for Texas environmental compliance."
     ),
 )
 
@@ -50,42 +52,56 @@ async def send_suggestion_to_ui(suggestion_event: dict[str, Any]) -> None:
 
 
 @mcp.tool()
-async def suggest_full_name(event: FullNameSuggestionEvent) -> str:
-    """Send a full name suggestion to the UI"""
+async def suggest_facility_name(event: FacilityNameSuggestionEvent) -> str:
+    """Send a facility name suggestion to the UI"""
     await send_suggestion_to_ui(event.model_dump())
-    return f"Sent full name suggestion: {event.suggestion}"
+    return f"Sent facility name suggestion: {event.suggestion}"
 
 
 @mcp.tool()
-async def suggest_email(event: EmailSuggestionEvent) -> str:
-    """Send an email suggestion to the UI"""
+async def suggest_operator_name(event: OperatorNameSuggestionEvent) -> str:
+    """Send an operator name suggestion to the UI"""
     await send_suggestion_to_ui(event.model_dump())
-    return f"Sent email suggestion: {event.suggestion}"
+    return f"Sent operator name suggestion: {event.suggestion}"
 
 
 @mcp.tool()
-async def suggest_industry(event: IndustrySuggestionEvent) -> str:
-    """Send an industry suggestion to the UI"""
+async def suggest_facility_address(event: FacilityAddressSuggestionEvent) -> str:
+    """Send a facility address suggestion to the UI"""
     await send_suggestion_to_ui(event.model_dump())
-    return f"Sent industry suggestion: {event.suggestion}"
+    return f"Sent facility address suggestion: {event.suggestion}"
 
 
 @mcp.tool()
-async def suggest_company_name(event: CompanyNameSuggestionEvent) -> str:
-    """Send a company name suggestion to the UI"""
+async def suggest_county(event: CountySuggestionEvent) -> str:
+    """Send a county suggestion to the UI"""
     await send_suggestion_to_ui(event.model_dump())
-    return f"Sent company name suggestion: {event.suggestion}"
+    return f"Sent county suggestion: {event.suggestion}"
 
 
 @mcp.tool()
-async def suggest_employee_count(event: NumberOfEmployeesSuggestionEvent) -> str:
-    """Send an employee count suggestion to the UI"""
+async def suggest_industry_type(event: IndustryTypeSuggestionEvent) -> str:
+    """Send an industry type suggestion to the UI"""
     await send_suggestion_to_ui(event.model_dump())
-    return f"Sent employee count suggestion: {event.suggestion}"
+    return f"Sent industry type suggestion: {event.suggestion}"
 
 
 @mcp.tool()
-async def suggest_goals(event: GoalsSuggestionEvent) -> str:
-    """Send a goals suggestion to the UI"""
+async def suggest_primary_operations(event: PrimaryOperationsSuggestionEvent) -> str:
+    """Send a primary operations description suggestion to the UI"""
     await send_suggestion_to_ui(event.model_dump())
-    return "Sent goals suggestion"
+    return "Sent primary operations suggestion"
+
+
+@mcp.tool()
+async def suggest_estimated_emissions(event: EstimatedEmissionsSuggestionEvent) -> str:
+    """Send an estimated annual emissions suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent estimated emissions suggestion: {event.suggestion}"
+
+
+@mcp.tool()
+async def suggest_compliance_method(event: ComplianceMethodSuggestionEvent) -> str:
+    """Send a compliance method suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent compliance method suggestion: {event.suggestion}"
