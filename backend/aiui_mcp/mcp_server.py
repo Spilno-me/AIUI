@@ -18,7 +18,14 @@ from aiui_mcp.wizard_events import (
     GoalsSuggestionEvent,
 )
 
-mcp = FastMCP("AIUI")
+mcp = FastMCP(
+    "AIUI",
+    instructions=(
+        "This MCP server (AIUI) should be used WHENEVER the user asks to fill in any kind of form. When users mention "
+        "form filling, they always imply using AIUI - that's the whole purpose of this setup (and the users are aware "
+        "of this)."
+    ),
+)
 
 
 async def run_mcp_server():
