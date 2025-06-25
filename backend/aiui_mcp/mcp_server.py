@@ -14,10 +14,27 @@ from aiui_mcp.wizard_events import (
     OperatorNameSuggestionEvent,
     FacilityAddressSuggestionEvent,
     CountySuggestionEvent,
+    LatitudeSuggestionEvent,
+    LongitudeSuggestionEvent,
+    RegulatedEntityNumberSuggestionEvent,
     IndustryTypeSuggestionEvent,
     PrimaryOperationsSuggestionEvent,
+    UnitTypeSuggestionEvent,
+    UnitDescriptionSuggestionEvent,
+    ControlDeviceSuggestionEvent,
+    PollutantsSuggestionEvent,
+    HasVOCStorageSuggestionEvent,
+    HasParticulatesSuggestionEvent,
+    HasCombustionSourcesSuggestionEvent,
     EstimatedEmissionsSuggestionEvent,
     ComplianceMethodSuggestionEvent,
+    SubjectToNSRSuggestionEvent,
+    HasRiskManagementPlanSuggestionEvent,
+    MonitoringRequirementsSuggestionEvent,
+    StratosphericOzoneComplianceSuggestionEvent,
+    EmissionCreditsUsedSuggestionEvent,
+    VolatileOrganicCompoundsSuggestionEvent,
+    SubscribeToUpdatesSuggestionEvent,
 )
 
 mcp = FastMCP(
@@ -105,3 +122,126 @@ async def suggest_compliance_method(event: ComplianceMethodSuggestionEvent) -> s
     """Send a compliance method suggestion to the UI"""
     await send_suggestion_to_ui(event.model_dump())
     return f"Sent compliance method suggestion: {event.suggestion}"
+
+
+# Additional Facility Step Tools
+@mcp.tool()
+async def suggest_latitude(event: LatitudeSuggestionEvent) -> str:
+    """Send a latitude coordinate suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent latitude suggestion: {event.suggestion}"
+
+
+@mcp.tool()
+async def suggest_longitude(event: LongitudeSuggestionEvent) -> str:
+    """Send a longitude coordinate suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent longitude suggestion: {event.suggestion}"
+
+
+@mcp.tool()
+async def suggest_regulated_entity_number(event: RegulatedEntityNumberSuggestionEvent) -> str:
+    """Send a regulated entity number suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent regulated entity number suggestion: {event.suggestion}"
+
+
+# Additional Emission Units Step Tools
+@mcp.tool()
+async def suggest_unit_type(event: UnitTypeSuggestionEvent) -> str:
+    """Send an emission unit type suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent unit type suggestion: {event.suggestion}"
+
+
+@mcp.tool()
+async def suggest_unit_description(event: UnitDescriptionSuggestionEvent) -> str:
+    """Send an emission unit description suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent unit description suggestion"
+
+
+@mcp.tool()
+async def suggest_control_device(event: ControlDeviceSuggestionEvent) -> str:
+    """Send a control device suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent control device suggestion: {event.suggestion}"
+
+
+@mcp.tool()
+async def suggest_pollutants(event: PollutantsSuggestionEvent) -> str:
+    """Send a pollutants suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent pollutants suggestion: {event.suggestion}"
+
+
+@mcp.tool()
+async def suggest_has_voc_storage(event: HasVOCStorageSuggestionEvent) -> str:
+    """Send a VOC storage checkbox suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent VOC storage suggestion: {event.suggestion}"
+
+
+@mcp.tool()
+async def suggest_has_particulates(event: HasParticulatesSuggestionEvent) -> str:
+    """Send a particulates checkbox suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent particulates suggestion: {event.suggestion}"
+
+
+@mcp.tool()
+async def suggest_has_combustion_sources(event: HasCombustionSourcesSuggestionEvent) -> str:
+    """Send a combustion sources checkbox suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent combustion sources suggestion: {event.suggestion}"
+
+
+# Additional Compliance Step Tools
+@mcp.tool()
+async def suggest_subject_to_nsr(event: SubjectToNSRSuggestionEvent) -> str:
+    """Send a New Source Review checkbox suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent NSR subject suggestion: {event.suggestion}"
+
+
+@mcp.tool()
+async def suggest_has_risk_management_plan(event: HasRiskManagementPlanSuggestionEvent) -> str:
+    """Send a Risk Management Plan checkbox suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent RMP suggestion: {event.suggestion}"
+
+
+@mcp.tool()
+async def suggest_monitoring_requirements(event: MonitoringRequirementsSuggestionEvent) -> str:
+    """Send a monitoring requirements suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent monitoring requirements suggestion: {event.suggestion}"
+
+
+@mcp.tool()
+async def suggest_stratospheric_ozone_compliance(event: StratosphericOzoneComplianceSuggestionEvent) -> str:
+    """Send a stratospheric ozone compliance checkbox suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent stratospheric ozone compliance suggestion: {event.suggestion}"
+
+
+# Additional Requirements Step Tools
+@mcp.tool()
+async def suggest_emission_credits_used(event: EmissionCreditsUsedSuggestionEvent) -> str:
+    """Send an emission credits used checkbox suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent emission credits used suggestion: {event.suggestion}"
+
+
+@mcp.tool()
+async def suggest_volatile_organic_compounds(event: VolatileOrganicCompoundsSuggestionEvent) -> str:
+    """Send a volatile organic compounds checkbox suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent VOC suggestion: {event.suggestion}"
+
+
+@mcp.tool()
+async def suggest_subscribe_to_updates(event: SubscribeToUpdatesSuggestionEvent) -> str:
+    """Send a subscribe to updates checkbox suggestion to the UI"""
+    await send_suggestion_to_ui(event.model_dump())
+    return f"Sent subscribe to updates suggestion: {event.suggestion}"
