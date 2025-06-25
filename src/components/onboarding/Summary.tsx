@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { usePermitApplicationStore } from '@/store/useOnboardingStore';
-import { CheckCircle, Building, MapPin, Factory, Zap, Shield, FileCheck, Bell } from 'lucide-react';
+import { CheckCircle, Building, Factory, Zap, Shield, FileCheck, Bell } from 'lucide-react';
 
 interface SummaryProps {
   onPrevious: () => void;
@@ -50,13 +50,6 @@ export function Summary({ onPrevious }: SummaryProps) {
               <div>
                 <p className="text-sm text-muted-foreground">Operator Name</p>
                 <p className="font-medium">{data.operatorName}</p>
-              </div>
-              <div className="md:col-span-2">
-                <p className="text-sm text-muted-foreground">Address</p>
-                <p className="font-medium flex items-center">
-                  <MapPin className="h-4 w-4 mr-1" />
-                  {data.facilityAddress}
-                </p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">County</p>

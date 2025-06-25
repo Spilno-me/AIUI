@@ -12,7 +12,6 @@ export interface PermitApplicationData {
   // Step 1: Facility Information
   facilityName: string;
   operatorName: string;
-  facilityAddress: string;
   county: string;
   latitude: string;
   longitude: string;
@@ -48,7 +47,7 @@ export interface PermitApplicationState {
   
   // Actions
   setCurrentStep: (step: number) => void;
-  updateFacilityInfo: (info: Partial<Pick<PermitApplicationData, 'facilityName' | 'operatorName' | 'facilityAddress' | 'county' | 'latitude' | 'longitude' | 'regulatedEntityNumber' | 'industryType'>>) => void;
+  updateFacilityInfo: (info: Partial<Pick<PermitApplicationData, 'facilityName' | 'operatorName' | 'county' | 'latitude' | 'longitude' | 'regulatedEntityNumber' | 'industryType'>>) => void;
   updateEmissionUnits: (units: Partial<Pick<PermitApplicationData, 'primaryOperations' | 'emissionUnits' | 'hasVOCStorage' | 'hasParticulates' | 'hasCombustionSources' | 'estimatedAnnualEmissions'>>) => void;
   updateCompliance: (compliance: Partial<Pick<PermitApplicationData, 'subjectToNSR' | 'hasRiskManagementPlan' | 'monitoringRequirements' | 'complianceMethod' | 'stratosphericOzoneCompliance'>>) => void;
   updateAdditionalRequirements: (additional: Partial<Pick<PermitApplicationData, 'emissionCreditsUsed' | 'volatileOrganicCompounds' | 'subscribeToUpdates'>>) => void;
@@ -63,7 +62,6 @@ export interface PermitApplicationState {
 const initialData: PermitApplicationData = {
   facilityName: '',
   operatorName: '',
-  facilityAddress: '',
   county: '',
   latitude: '',
   longitude: '',

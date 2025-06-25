@@ -79,13 +79,6 @@ class OperatorNameSuggestionEvent(BaseSuggestionEvent):
     suggestion: str = Field(..., min_length=2, max_length=100, description="Suggested operator name")
 
 
-class FacilityAddressSuggestionEvent(BaseSuggestionEvent):
-    """Event for suggesting facility address"""
-
-    event_type: Literal["facility_address_suggestion"] = "facility_address_suggestion"
-    step: Literal[WizardStep.FACILITY] = WizardStep.FACILITY
-    field_name: Literal["facilityAddress"] = "facilityAddress"
-    suggestion: str = Field(..., min_length=10, max_length=200, description="Suggested facility address")
 
 
 class CountySuggestionEvent(BaseSuggestionEvent):
@@ -295,7 +288,6 @@ class SubscribeToUpdatesSuggestionEvent(BaseSuggestionEvent):
 SuggestionEvent = (
     FacilityNameSuggestionEvent
     | OperatorNameSuggestionEvent
-    | FacilityAddressSuggestionEvent
     | CountySuggestionEvent
     | LatitudeSuggestionEvent
     | LongitudeSuggestionEvent

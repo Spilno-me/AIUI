@@ -35,7 +35,6 @@ export function FacilityStep({ onNext, suggestions, onAcceptSuggestion, onReject
     defaultValues: {
       facilityName: data.facilityName,
       operatorName: data.operatorName,
-      facilityAddress: data.facilityAddress,
       county: data.county,
       latitude: data.latitude,
       longitude: data.longitude,
@@ -115,32 +114,6 @@ export function FacilityStep({ onNext, suggestions, onAcceptSuggestion, onReject
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="facilityAddress"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Facility Address *</FormLabel>
-                  <FormControl>
-                    <SuggestionInput
-                      suggestion={suggestions['facilityAddress']}
-                      onAccept={(value) => {
-                        field.onChange(value);
-                        onAcceptSuggestion('facilityAddress', value);
-                      }}
-                      onReject={() => onRejectSuggestion('facilityAddress')}
-                    >
-                      <Input 
-                        placeholder="Enter complete facility address" 
-                        {...field} 
-                        data-testid="facilityAddress-input"
-                      />
-                    </SuggestionInput>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
             <div className="grid grid-cols-2 gap-4">
               <FormField

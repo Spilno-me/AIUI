@@ -12,7 +12,6 @@ from aiui_mcp.common import get_current_websocket, log_message_to_file
 from aiui_mcp.wizard_events import (
     FacilityNameSuggestionEvent,
     OperatorNameSuggestionEvent,
-    FacilityAddressSuggestionEvent,
     CountySuggestionEvent,
     LatitudeSuggestionEvent,
     LongitudeSuggestionEvent,
@@ -82,11 +81,6 @@ async def suggest_operator_name(event: OperatorNameSuggestionEvent) -> str:
     return f"Sent operator name suggestion: {event.suggestion}"
 
 
-@mcp.tool()
-async def suggest_facility_address(event: FacilityAddressSuggestionEvent) -> str:
-    """Send a facility address suggestion to the UI"""
-    await send_suggestion_to_ui(event.model_dump())
-    return f"Sent facility address suggestion: {event.suggestion}"
 
 
 @mcp.tool()
