@@ -177,11 +177,20 @@ export function FacilityStep({ onNext, suggestions, onAcceptSuggestion, onReject
                   <FormItem>
                     <FormLabel>Regulated Entity Number *</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="RN123456789" 
-                        {...field} 
-                        data-testid="regulatedEntityNumber-input"
-                      />
+                      <SuggestionInput
+                        suggestion={suggestions['regulatedEntityNumber']}
+                        onAccept={(value) => {
+                          field.onChange(value);
+                          onAcceptSuggestion('regulatedEntityNumber', value);
+                        }}
+                        onReject={() => onRejectSuggestion('regulatedEntityNumber')}
+                      >
+                        <Input 
+                          placeholder="RN123456789" 
+                          {...field} 
+                          data-testid="regulatedEntityNumber-input"
+                        />
+                      </SuggestionInput>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -197,11 +206,20 @@ export function FacilityStep({ onNext, suggestions, onAcceptSuggestion, onReject
                   <FormItem>
                     <FormLabel>Latitude *</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="29.738333" 
-                        {...field} 
-                        data-testid="latitude-input"
-                      />
+                      <SuggestionInput
+                        suggestion={suggestions['latitude']}
+                        onAccept={(value) => {
+                          field.onChange(value);
+                          onAcceptSuggestion('latitude', value);
+                        }}
+                        onReject={() => onRejectSuggestion('latitude')}
+                      >
+                        <Input 
+                          placeholder="29.738333" 
+                          {...field} 
+                          data-testid="latitude-input"
+                        />
+                      </SuggestionInput>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -215,11 +233,20 @@ export function FacilityStep({ onNext, suggestions, onAcceptSuggestion, onReject
                   <FormItem>
                     <FormLabel>Longitude *</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="-95.168056" 
-                        {...field} 
-                        data-testid="longitude-input"
-                      />
+                      <SuggestionInput
+                        suggestion={suggestions['longitude']}
+                        onAccept={(value) => {
+                          field.onChange(value);
+                          onAcceptSuggestion('longitude', value);
+                        }}
+                        onReject={() => onRejectSuggestion('longitude')}
+                      >
+                        <Input 
+                          placeholder="-95.168056" 
+                          {...field} 
+                          data-testid="longitude-input"
+                        />
+                      </SuggestionInput>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

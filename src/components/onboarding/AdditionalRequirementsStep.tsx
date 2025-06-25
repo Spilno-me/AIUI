@@ -55,8 +55,15 @@ export function AdditionalRequirementsStep({ onNext, onPrevious, suggestions, on
                       <SuggestionCheckbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        onAccept={() => {}}
-                        onReject={() => {}}
+                        suggestion={suggestions['emissionCreditsUsed'] ? {
+                          value: Boolean(suggestions['emissionCreditsUsed'].value === 'true'),
+                          reasoning: suggestions['emissionCreditsUsed'].reasoning
+                        } : undefined}
+                        onAccept={(value) => {
+                          field.onChange(value);
+                          onAcceptSuggestion('emissionCreditsUsed', value);
+                        }}
+                        onReject={() => onRejectSuggestion('emissionCreditsUsed')}
                         id="emissionCreditsUsed"
                       />
                     </FormControl>
@@ -79,8 +86,15 @@ export function AdditionalRequirementsStep({ onNext, onPrevious, suggestions, on
                       <SuggestionCheckbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        onAccept={() => {}}
-                        onReject={() => {}}
+                        suggestion={suggestions['volatileOrganicCompounds'] ? {
+                          value: Boolean(suggestions['volatileOrganicCompounds'].value === 'true'),
+                          reasoning: suggestions['volatileOrganicCompounds'].reasoning
+                        } : undefined}
+                        onAccept={(value) => {
+                          field.onChange(value);
+                          onAcceptSuggestion('volatileOrganicCompounds', value);
+                        }}
+                        onReject={() => onRejectSuggestion('volatileOrganicCompounds')}
                         id="volatileOrganicCompounds"
                       />
                     </FormControl>

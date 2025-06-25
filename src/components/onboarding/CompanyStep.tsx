@@ -152,8 +152,12 @@ export function EmissionUnitsStep({ onNext, onPrevious, suggestions, onAcceptSug
                             <SuggestionSelect
                               value={field.value}
                               onValueChange={field.onChange}
-                              onAccept={() => {}}
-                              onReject={() => {}}
+                              suggestion={suggestions[`unitType_${index}`]}
+                              onAccept={(value) => {
+                                field.onChange(value);
+                                onAcceptSuggestion(`unitType_${index}`, value);
+                              }}
+                              onReject={() => onRejectSuggestion(`unitType_${index}`)}
                               placeholder="Select unit type"
                             >
                               {UNIT_TYPES.map((type) => (
@@ -175,10 +179,19 @@ export function EmissionUnitsStep({ onNext, onPrevious, suggestions, onAcceptSug
                         <FormItem>
                           <FormLabel>Control Device</FormLabel>
                           <FormControl>
-                            <Input 
-                              placeholder="Optional control device" 
-                              {...field} 
-                            />
+                            <SuggestionInput
+                              suggestion={suggestions[`controlDevice_${index}`]}
+                              onAccept={(value) => {
+                                field.onChange(value);
+                                onAcceptSuggestion(`controlDevice_${index}`, value);
+                              }}
+                              onReject={() => onRejectSuggestion(`controlDevice_${index}`)}
+                            >
+                              <Input 
+                                placeholder="Optional control device" 
+                                {...field} 
+                              />
+                            </SuggestionInput>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -193,10 +206,19 @@ export function EmissionUnitsStep({ onNext, onPrevious, suggestions, onAcceptSug
                       <FormItem className="mt-4">
                         <FormLabel>Description *</FormLabel>
                         <FormControl>
-                          <Textarea
-                            placeholder="Describe this emission unit..."
-                            {...field}
-                          />
+                          <SuggestionTextarea
+                            suggestion={suggestions[`description_${index}`]}
+                            onAccept={(value) => {
+                              field.onChange(value);
+                              onAcceptSuggestion(`description_${index}`, value);
+                            }}
+                            onReject={() => onRejectSuggestion(`description_${index}`)}
+                          >
+                            <Textarea
+                              placeholder="Describe this emission unit..."
+                              {...field}
+                            />
+                          </SuggestionTextarea>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -210,11 +232,20 @@ export function EmissionUnitsStep({ onNext, onPrevious, suggestions, onAcceptSug
                       <FormItem className="mt-4">
                         <FormLabel>Pollutants *</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="Enter pollutants (comma-separated)" 
-                            value={field.value?.join(', ') || ''}
-                            onChange={(e) => field.onChange(e.target.value.split(',').map(p => p.trim()).filter(Boolean))}
-                          />
+                          <SuggestionInput
+                            suggestion={suggestions[`pollutants_${index}`]}
+                            onAccept={(value) => {
+                              field.onChange(value.split(',').map(p => p.trim()).filter(Boolean));
+                              onAcceptSuggestion(`pollutants_${index}`, value);
+                            }}
+                            onReject={() => onRejectSuggestion(`pollutants_${index}`)}
+                          >
+                            <Input 
+                              placeholder="Enter pollutants (comma-separated)" 
+                              value={field.value?.join(', ') || ''}
+                              onChange={(e) => field.onChange(e.target.value.split(',').map(p => p.trim()).filter(Boolean))}
+                            />
+                          </SuggestionInput>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -234,8 +265,15 @@ export function EmissionUnitsStep({ onNext, onPrevious, suggestions, onAcceptSug
                       <SuggestionCheckbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        onAccept={() => {}}
-                        onReject={() => {}}
+                        suggestion={suggestions['hasVOCStorage'] ? {
+                          value: Boolean(suggestions['hasVOCStorage'].value === 'true'),
+                          reasoning: suggestions['hasVOCStorage'].reasoning
+                        } : undefined}
+                        onAccept={(value) => {
+                          field.onChange(value);
+                          onAcceptSuggestion('hasVOCStorage', value);
+                        }}
+                        onReject={() => onRejectSuggestion('hasVOCStorage')}
                         id="hasVOCStorage"
                       />
                     </FormControl>
@@ -255,8 +293,15 @@ export function EmissionUnitsStep({ onNext, onPrevious, suggestions, onAcceptSug
                       <SuggestionCheckbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        onAccept={() => {}}
-                        onReject={() => {}}
+                        suggestion={suggestions['hasParticulates'] ? {
+                          value: Boolean(suggestions['hasParticulates'].value === 'true'),
+                          reasoning: suggestions['hasParticulates'].reasoning
+                        } : undefined}
+                        onAccept={(value) => {
+                          field.onChange(value);
+                          onAcceptSuggestion('hasParticulates', value);
+                        }}
+                        onReject={() => onRejectSuggestion('hasParticulates')}
                         id="hasParticulates"
                       />
                     </FormControl>
@@ -276,8 +321,15 @@ export function EmissionUnitsStep({ onNext, onPrevious, suggestions, onAcceptSug
                       <SuggestionCheckbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        onAccept={() => {}}
-                        onReject={() => {}}
+                        suggestion={suggestions['hasCombustionSources'] ? {
+                          value: Boolean(suggestions['hasCombustionSources'].value === 'true'),
+                          reasoning: suggestions['hasCombustionSources'].reasoning
+                        } : undefined}
+                        onAccept={(value) => {
+                          field.onChange(value);
+                          onAcceptSuggestion('hasCombustionSources', value);
+                        }}
+                        onReject={() => onRejectSuggestion('hasCombustionSources')}
                         id="hasCombustionSources"
                       />
                     </FormControl>

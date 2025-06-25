@@ -83,8 +83,15 @@ export function ComplianceStep({ onNext, onPrevious, suggestions, onAcceptSugges
                       <SuggestionCheckbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        onAccept={() => {}}
-                        onReject={() => {}}
+                        suggestion={suggestions['subjectToNSR'] ? {
+                          value: Boolean(suggestions['subjectToNSR'].value === 'true'),
+                          reasoning: suggestions['subjectToNSR'].reasoning
+                        } : undefined}
+                        onAccept={(value) => {
+                          field.onChange(value);
+                          onAcceptSuggestion('subjectToNSR', value);
+                        }}
+                        onReject={() => onRejectSuggestion('subjectToNSR')}
                         id="subjectToNSR"
                       />
                     </FormControl>
@@ -107,8 +114,15 @@ export function ComplianceStep({ onNext, onPrevious, suggestions, onAcceptSugges
                       <SuggestionCheckbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        onAccept={() => {}}
-                        onReject={() => {}}
+                        suggestion={suggestions['hasRiskManagementPlan'] ? {
+                          value: Boolean(suggestions['hasRiskManagementPlan'].value === 'true'),
+                          reasoning: suggestions['hasRiskManagementPlan'].reasoning
+                        } : undefined}
+                        onAccept={(value) => {
+                          field.onChange(value);
+                          onAcceptSuggestion('hasRiskManagementPlan', value);
+                        }}
+                        onReject={() => onRejectSuggestion('hasRiskManagementPlan')}
                         id="hasRiskManagementPlan"
                       />
                     </FormControl>
@@ -131,8 +145,15 @@ export function ComplianceStep({ onNext, onPrevious, suggestions, onAcceptSugges
                       <SuggestionCheckbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        onAccept={() => {}}
-                        onReject={() => {}}
+                        suggestion={suggestions['stratosphericOzoneCompliance'] ? {
+                          value: Boolean(suggestions['stratosphericOzoneCompliance'].value === 'true'),
+                          reasoning: suggestions['stratosphericOzoneCompliance'].reasoning
+                        } : undefined}
+                        onAccept={(value) => {
+                          field.onChange(value);
+                          onAcceptSuggestion('stratosphericOzoneCompliance', value);
+                        }}
+                        onReject={() => onRejectSuggestion('stratosphericOzoneCompliance')}
                         id="stratosphericOzoneCompliance"
                       />
                     </FormControl>
@@ -192,8 +213,15 @@ export function ComplianceStep({ onNext, onPrevious, suggestions, onAcceptSugges
                       <SuggestionCheckbox
                         checked={form.watch('monitoringRequirements').includes(option)}
                         onCheckedChange={(checked) => handleMonitoringChange(option, checked)}
-                        onAccept={() => {}}
-                        onReject={() => {}}
+                        suggestion={suggestions[`monitoring_${option.replace(/[^a-zA-Z0-9]/g, '_')}`] ? {
+                          value: Boolean(suggestions[`monitoring_${option.replace(/[^a-zA-Z0-9]/g, '_')}`]?.value === 'true'),
+                          reasoning: suggestions[`monitoring_${option.replace(/[^a-zA-Z0-9]/g, '_')}`]?.reasoning || ''
+                        } : undefined}
+                        onAccept={(value) => {
+                          handleMonitoringChange(option, value);
+                          onAcceptSuggestion(`monitoring_${option.replace(/[^a-zA-Z0-9]/g, '_')}`, value);
+                        }}
+                        onReject={() => onRejectSuggestion(`monitoring_${option.replace(/[^a-zA-Z0-9]/g, '_')}`)}
                         id={`monitoring-${option}`}
                       />
                     </FormControl>
