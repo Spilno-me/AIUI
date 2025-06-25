@@ -13,7 +13,7 @@ import { emissionUnitsStepSchema, type EmissionUnitsStepData } from '@/lib/valid
 import { SuggestionInput } from '@/components/ui/suggestion-input';
 import { SuggestionTextarea } from '@/components/ui/suggestion-textarea';
 import { useAISuggestions } from '@/hooks/useAISuggestions';
-import { Plus, Trash2, Factory2 } from 'lucide-react';
+import { Plus, Trash2, Factory } from 'lucide-react';
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const UNIT_TYPES = [
@@ -44,7 +44,7 @@ interface EmissionUnitsStepProps {
 }
 
 export function EmissionUnitsStep({ onNext, onPrevious, suggestions, onAcceptSuggestion, onRejectSuggestion }: EmissionUnitsStepProps) {
-  const { data, updateEmissionUnits, addEmissionUnit, removeEmissionUnit, updateEmissionUnit, markStepCompleted } = usePermitApplicationStore();
+  const { data, updateEmissionUnits, addEmissionUnit, removeEmissionUnit, markStepCompleted } = usePermitApplicationStore();
   const [showAddUnit, setShowAddUnit] = useState(false);
   const [newUnit, setNewUnit] = useState<Partial<EmissionUnit>>({
     unitType: undefined,
@@ -105,7 +105,7 @@ export function EmissionUnitsStep({ onNext, onPrevious, suggestions, onAcceptSug
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader className="text-center">
         <div className="flex justify-center mb-4">
-          <Factory2 className="h-12 w-12 text-primary" />
+          <Factory className="h-12 w-12 text-primary" />
         </div>
         <CardTitle className="text-2xl font-bold">Emission Units & Operations</CardTitle>
         <CardDescription>

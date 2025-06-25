@@ -5,12 +5,12 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { usePermitApplicationStore } from '@/store/usePermitApplicationStore';
 import { additionalRequirementsStepSchema, type AdditionalRequirementsStepData } from '@/lib/validationSchemas';
-import { Building2, Factory2, Shield, FileCheck, Bell, MapPin, ClipboardCheck } from 'lucide-react';
+import { Building2, Factory, Shield, FileCheck, Bell, MapPin, ClipboardCheck } from 'lucide-react';
 
 interface SummaryProps {
   onPrevious: () => void;
@@ -123,7 +123,7 @@ export function Summary({ onPrevious }: SummaryProps) {
           {/* Emission Units */}
           <div className="space-y-3">
             <div className="flex items-center space-x-2">
-              <Factory2 className="h-5 w-5 text-primary" />
+              <Factory className="h-5 w-5 text-primary" />
               <h3 className="text-lg font-semibold">Emission Units & Operations</h3>
             </div>
             <div className="space-y-3 pl-7">
