@@ -1,77 +1,129 @@
 import { create } from 'zustand';
 
-export interface OnboardingData {
-  // Step 1: Welcome & User Info
-  fullName: string;
-  email: string;
-  password: string;
-  industry: string;
+export interface EmissionUnit {
+  id: string;
+  unitType: 'storage_tank' | 'combustion_source' | 'process_vent' | 'fugitive' | 'other';
+  description: string;
+  pollutants: string[];
+  controlDevice?: string;
+}
+
+export interface PermitApplicationData {
+  // Step 1: Facility Information
+  facilityName: string;
+  operatorName: string;
+  county: string;
+  latitude: string;
+  longitude: string;
+  regulatedEntityNumber: string;
+  industryType: 'petrochemical' | 'manufacturing' | 'power_generation' | 'refining' | 'chemical' | 'other';
   
-  // Step 2: Company Details
-  companyName: string;
-  numberOfEmployees: string;
-  goals: string;
+  // Step 2: Emission Units & Operations
+  primaryOperations: string;
+  emissionUnits: EmissionUnit[];
+  hasVOCStorage: boolean;
+  hasParticulates: boolean;
+  hasCombustionSources: boolean;
+  estimatedAnnualEmissions: string;
+  
+  // Step 3: Compliance & Monitoring
+  subjectToNSR: boolean;
+  hasRiskManagementPlan: boolean;
+  monitoringRequirements: string[];
+  complianceMethod: 'continuous' | 'periodic' | 'predictive' | 'parametric';
+  stratosphericOzoneCompliance: boolean;
+  
+  // Step 4: Additional Requirements
+  emissionCreditsUsed: boolean;
+  volatileOrganicCompounds: boolean;
   subscribeToUpdates: boolean;
 }
 
-export interface OnboardingState {
+export interface PermitApplicationState {
   currentStep: number;
-  data: OnboardingData;
+  data: PermitApplicationData;
   isCompleted: boolean;
   completedSteps: Set<number>;
   
   // Actions
   setCurrentStep: (step: number) => void;
-  updateUserInfo: (info: Partial<Pick<OnboardingData, 'fullName' | 'email' | 'password' | 'industry'>>) => void;
-  updateCompanyDetails: (details: Partial<Pick<OnboardingData, 'companyName' | 'numberOfEmployees' | 'goals' | 'subscribeToUpdates'>>) => void;
+  updateFacilityInfo: (info: Partial<Pick<PermitApplicationData, 'facilityName' | 'operatorName' | 'county' | 'latitude' | 'longitude' | 'regulatedEntityNumber' | 'industryType'>>) => void;
+  updateEmissionUnits: (units: Partial<Pick<PermitApplicationData, 'primaryOperations' | 'emissionUnits' | 'hasVOCStorage' | 'hasParticulates' | 'hasCombustionSources' | 'estimatedAnnualEmissions'>>) => void;
+  updateCompliance: (compliance: Partial<Pick<PermitApplicationData, 'subjectToNSR' | 'hasRiskManagementPlan' | 'monitoringRequirements' | 'complianceMethod' | 'stratosphericOzoneCompliance'>>) => void;
+  updateAdditionalRequirements: (additional: Partial<Pick<PermitApplicationData, 'emissionCreditsUsed' | 'volatileOrganicCompounds' | 'subscribeToUpdates'>>) => void;
   nextStep: () => void;
   previousStep: () => void;
-  completeOnboarding: () => void;
-  resetOnboarding: () => void;
+  completeApplication: () => void;
+  resetApplication: () => void;
   markStepCompleted: (step: number) => void;
   isStepAccessible: (step: number) => boolean;
 }
 
-const initialData: OnboardingData = {
-  fullName: '',
-  email: '',
-  password: '',
-  industry: '',
-  companyName: '',
-  numberOfEmployees: '',
-  goals: '',
+const initialData: PermitApplicationData = {
+  facilityName: '',
+  operatorName: '',
+  county: '',
+  latitude: '',
+  longitude: '',
+  regulatedEntityNumber: '',
+  industryType: 'other',
+  primaryOperations: '',
+  emissionUnits: [],
+  hasVOCStorage: false,
+  hasParticulates: false,
+  hasCombustionSources: false,
+  estimatedAnnualEmissions: '',
+  subjectToNSR: false,
+  hasRiskManagementPlan: false,
+  monitoringRequirements: [],
+  complianceMethod: 'periodic',
+  stratosphericOzoneCompliance: false,
+  emissionCreditsUsed: false,
+  volatileOrganicCompounds: false,
   subscribeToUpdates: false,
 };
 
-export const useOnboardingStore = create<OnboardingState>((set, get) => ({
+export const usePermitApplicationStore = create<PermitApplicationState>((set, get) => ({
   currentStep: 1,
   data: initialData,
   isCompleted: false,
-  completedSteps: new Set(), // No steps completed initially
+  completedSteps: new Set(),
   
   setCurrentStep: (step: number) => {
     const { isStepAccessible } = get();
     if (isStepAccessible(step)) {
-      set({ currentStep: Math.max(1, Math.min(3, step)) });
+      set({ currentStep: Math.max(1, Math.min(4, step)) });
     }
   },
   
-  updateUserInfo: (info) => {
+  updateFacilityInfo: (info) => {
     set((state) => ({
       data: { ...state.data, ...info }
     }));
   },
   
-  updateCompanyDetails: (details) => {
+  updateEmissionUnits: (units) => {
     set((state) => ({
-      data: { ...state.data, ...details }
+      data: { ...state.data, ...units }
+    }));
+  },
+  
+  updateCompliance: (compliance) => {
+    set((state) => ({
+      data: { ...state.data, ...compliance }
+    }));
+  },
+  
+  updateAdditionalRequirements: (additional) => {
+    set((state) => ({
+      data: { ...state.data, ...additional }
     }));
   },
   
   nextStep: () => {
     const { currentStep, isStepAccessible } = get();
     const nextStepNumber = currentStep + 1;
-    if (nextStepNumber <= 3 && isStepAccessible(nextStepNumber)) {
+    if (nextStepNumber <= 4 && isStepAccessible(nextStepNumber)) {
       set({ currentStep: nextStepNumber });
     }
   },
@@ -83,11 +135,11 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
     }
   },
   
-  completeOnboarding: () => {
+  completeApplication: () => {
     set({ isCompleted: true });
   },
   
-  resetOnboarding: () => {
+  resetApplication: () => {
     set({
       currentStep: 1,
       data: initialData,
@@ -104,9 +156,7 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
   
   isStepAccessible: (step: number) => {
     const { completedSteps } = get();
-    // Step 1 is always accessible
     if (step === 1) return true;
-    // For other steps, the previous step must be completed
     return completedSteps.has(step - 1);
   },
 })); 

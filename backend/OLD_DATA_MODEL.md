@@ -4,7 +4,7 @@ This document describes the frontend data model used by the AIUI Onboarding Wiza
 
 ## Overview
 
-The onboarding wizard implements a 4-step progressive form system that collects user information, company details, personalization preferences, and displays a summary. The data model ensures type safety and validation consistency across the React TypeScript frontend.
+The onboarding wizard implements a 3-step progressive form system that collects user information, company details, and displays a summary. The data model ensures type safety and validation consistency across the React TypeScript frontend.
 
 ## Frontend Data Models (TypeScript)
 
@@ -23,10 +23,6 @@ interface OnboardingData {
   numberOfEmployees: string;
   goals: string;
   subscribeToUpdates: boolean;
-  
-  // Step 3: Personalization
-  vibe: 'builder' | 'dreamer' | 'hacker' | 'visionary' | undefined;
-  favoriteColor: string;
 }
 ```
 
@@ -54,13 +50,6 @@ const companySchema = z.object({
 });
 ```
 
-#### Personalization Step Schema
-```typescript
-const personalizationSchema = z.object({
-  vibe: z.enum(['builder', 'dreamer', 'hacker', 'visionary']),
-  favoriteColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Please select a valid color")
-});
-```
 
 ## Data Flow Architecture
 
