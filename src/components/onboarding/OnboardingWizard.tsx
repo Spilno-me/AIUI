@@ -1,5 +1,5 @@
 import { WizardLayout } from './WizardLayout';
 
-export function OnboardingWizard() {
+export function PermitApplicationWizard() {
   return <WizardLayout />;
 } 
